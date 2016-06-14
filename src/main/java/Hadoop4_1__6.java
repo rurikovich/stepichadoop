@@ -1,7 +1,5 @@
 
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -12,22 +10,31 @@ public class Hadoop4_1__6 {
     public static void main(String[] args) {
         Scanner reader = new Scanner(System.in);
         String line;
-        Map<String, Integer> sumMap = new HashMap<>();
-        Map<String, Integer> countMap = new HashMap<>();
+
+        String url = "";
+        Integer time = 0;
+        int sum = 0;
+        int count = 0;
+
+        String prevUrl = "";
+
         while (reader.hasNext()) {
             line = reader.nextLine();
             String[] keyValue = line.split("\t");
-            String url = keyValue[0];
-            Integer time = Integer.parseInt(keyValue[1]);
-            sumMap.put(url, sumMap.containsKey(url) ? sumMap.get(url) + time : time);
-            countMap.put(url, countMap.containsKey(url) ? countMap.get(url) + 1 : 1);
-        }
-        for (String key : countMap.keySet()) {
-            Integer time = sumMap.get(key);
-            Integer count = countMap.get(key);
+            url = keyValue[0];
+            time = Integer.parseInt(keyValue[1]);
 
-            System.out.println(key + "\t" + time / count);
+            if (prevUrl.equals("") || url.equals(prevUrl)) {
+                sum += time;
+                count++;
+            } else {
+                System.out.println(prevUrl + "\t" + Math.round(sum / count));
+                sum = time;
+                count = 1;
+            }
+            prevUrl=url;
         }
+        System.out.println(prevUrl + "\t" + Math.round(sum / count));
     }
 
 
