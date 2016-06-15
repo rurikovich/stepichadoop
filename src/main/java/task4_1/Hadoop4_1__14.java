@@ -1,3 +1,5 @@
+package task4_1;
+
 import java.util.Scanner;
 
 /**
