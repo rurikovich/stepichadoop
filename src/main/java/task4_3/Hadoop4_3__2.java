@@ -12,15 +12,15 @@ public class Hadoop4_3__2 {
 
         while (reader.hasNext()) {
             line = reader.nextLine();
-            line.replaceAll("\\W|\t"," ");
-            line.trim();
+            line = line.replaceAll("[\\W]+", " ");
+            line = line.trim();
             String[] items = line.split("(\\s|:)+");
             String docNumber = items[0];
             for (int i = 1; i < items.length; i++) {
                 System.out.println(items[i] + "#" + docNumber + "\t" + 1);
             }
         }
-
+// 2:de mortuis aut!~@$%^&*()-+=;;{}[]/,. lbene aut nihi
 
     }
 
