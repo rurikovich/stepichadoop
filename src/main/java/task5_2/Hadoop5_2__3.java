@@ -6,6 +6,9 @@ import java.util.*;
  * Created by rurik on 14.06.2016.
  */
 public class Hadoop5_2__3 {
+
+    public static final int MAX = Integer.MAX_VALUE / 2;
+
     public static void main(String[] args) {
 
         //---------------- input reading------------------------
@@ -32,9 +35,10 @@ public class Hadoop5_2__3 {
         //---------------- input reading------------------------
 
 
+        //---------------- init------------------------
         int d[] = new int[nV];
         for (int i = 0; i < nV; i++) {
-            d[i] = Integer.MAX_VALUE;
+            d[i] = 0;
         }
         d[start] = 0;
 
@@ -45,12 +49,13 @@ public class Hadoop5_2__3 {
                 q.add(i);
             }
         }
-
         List<Integer> processedV = new ArrayList<>();
         processedV.add(start);
+        //---------------- init------------------------
+
 
         while (!q.isEmpty()) {
-            int minWeight = Integer.MAX_VALUE;
+            int minWeight = MAX;
             int minI = 0;
             int minJ = 0;
 
@@ -68,13 +73,16 @@ public class Hadoop5_2__3 {
                 }
             }
 
-            d[minJ] = d[minI] + minWeight;
-
-
-            processedV.add(minJ);
-            q.remove(minJ);
+            if (minWeight != MAX) {
+                d[minJ] = d[minI] + minWeight;
+                processedV.add(minJ);
+                q.remove(minJ);
+            } else {
+                System.out.println(-1);
+                return;
+            }
         }
-        System.out.println(d[end]);
+        System.out.println(d[end] == 0 ? -1 : d[end]);
 
     }
 
