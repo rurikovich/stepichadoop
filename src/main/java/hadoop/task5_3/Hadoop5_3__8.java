@@ -1,4 +1,4 @@
-package task5_3;
+package hadoop.task5_3;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
