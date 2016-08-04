@@ -1,4 +1,4 @@
-package task4_3;
+package hadoop.task4_3;
 
 import java.util.Scanner;
 

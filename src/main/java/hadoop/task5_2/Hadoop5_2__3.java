@@ -1,4 +1,4 @@
-package task5_2;
+package hadoop.task5_2;
 
 import java.util.*;
 

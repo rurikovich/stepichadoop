@@ -1,4 +1,4 @@
-package task4_2;
+package hadoop.task4_2;
 
 import java.util.ArrayList;
 import java.util.List;
