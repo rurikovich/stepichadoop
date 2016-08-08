@@ -1,11 +1,11 @@
-package cs_algo_theory_and_practice_methods.task1_2;
+package cs_algo_theory_and_practice_methods.task2_2;
 
 import java.util.Scanner;
 
 /**
  * Created by rurik on 14.06.2016.
  */
-public class CsAlgo1_2__7 {
+public class CsAlgo2_2__7 {
 
     public static void main(String[] args) {
         Scanner reader = new Scanner(System.in);
