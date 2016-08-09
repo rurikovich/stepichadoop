@@ -1,4 +1,4 @@
-package cs_algo_theory_and_practice_methods.task2_3.task2_2;
+package cs_algo_theory_and_practice_methods.task2_3;
 
 import java.util.Scanner;
 

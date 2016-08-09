@@ -1,6 +1,6 @@
 package cs_algo_theory_and_practice_methods.task2_2
 
-import cs_algo_theory_and_practice_methods.task2_3.task2_2.CsAlgo2_3__5
+import cs_algo_theory_and_practice_methods.task2_3.CsAlgo2_3__5
 import spock.lang.Specification
 
 
