@@ -16,7 +16,7 @@ class CsAlgo3_1__10Spec extends Specification {
 
         where:
         ww | things                                       || res
-//        50 | [pair(60, 20), pair(100, 50), pair(120, 30)] || 180.000d
+        50 | [pair(60, 20), pair(100, 50), pair(120, 30)] || 180.000d
         25 | [pair(250, 23), pair(120, 11)]               || 272.17391304347825d
 
     }
