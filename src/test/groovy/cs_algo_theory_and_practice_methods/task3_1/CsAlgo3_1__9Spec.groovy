@@ -1,5 +1,6 @@
 package cs_algo_theory_and_practice_methods.task3_1
 
+import javafx.util.Pair
 import spock.lang.Specification
 
 
@@ -14,11 +15,17 @@ class CsAlgo3_1__9Spec extends Specification {
         CsAlgo3_1__9.process(segments) == res
 
         where:
-        segments                 || res
-        [1, 3, 2, 5, 3, 6]       || [3]
-        [4, 7, 1, 3, 2, 5, 5, 6] || [3, 6]
+        segments                                         || res
+        [pair(1, 3), pair(2, 5), pair(3, 6)]             || [3]
+        [pair(4, 7), pair(1, 3), pair(2, 5), pair(5, 6)] || [3, 6]
 
 
     }
 
+    Pair pair(Integer a, Integer b) {
+        return new Pair(a, b)
+    }
 }
+
+
+
