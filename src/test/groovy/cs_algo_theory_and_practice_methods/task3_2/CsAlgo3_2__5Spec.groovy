@@ -19,6 +19,7 @@ class CsAlgo3_2__5Spec extends Specification {
         "ab"       || "01"
         "aaaaa"    || "00000"
         "abacabad" || "01001100100111"
+        "aaassssdddddffffffggggggg" || "01001100100111"
 
 
     }

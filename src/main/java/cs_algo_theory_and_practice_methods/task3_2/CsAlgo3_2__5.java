@@ -1,6 +1,7 @@
 package cs_algo_theory_and_practice_methods.task3_2;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by rurik on 14.06.2016.
@@ -82,34 +83,24 @@ public class CsAlgo3_2__5 {
 
     private static StrongBinaryTree buildTree(Map<String, Integer> charsFrequencies) {
         StrongBinaryTree sbTree = new StrongBinaryTree();
-
-        PriorityQueue<Map.Entry<String, Integer>> priorityQueue = new PriorityQueue<>((o1, o2) -> o1.getValue().compareTo(o2.getValue()));
-        priorityQueue.addAll(charsFrequencies.entrySet());
-
-        while (!priorityQueue.isEmpty()) {
-            if (sbTree.getHead() == null) {
-                Item l = pollAndCreateItem(priorityQueue);
-                Item r = pollAndCreateItem(priorityQueue);
-                Item head = new Item(l.getF() + r.getF(), l, r);
-                l.setParent(head);
-                r.setParent(head);
-                sbTree.setHead(head);
-            } else {
-                Item l = pollAndCreateItem(priorityQueue);
-                Item r = sbTree.getHead();
-                Item newHead = new Item(l.getF() + r.getF(), l, r);
-                l.setParent(newHead);
-                r.setParent(newHead);
-                sbTree.setHead(newHead);
-            }
+        PriorityQueue<Item> priorityQueue = createItemPriorityQueue(charsFrequencies);
+        while (priorityQueue.size()>=2) {
+            Item l = priorityQueue.poll();
+            Item r = priorityQueue.poll();
+            Item head = new Item(l.getF() + r.getF(), l, r);
+            l.setParent(head);
+            r.setParent(head);
+            priorityQueue.add(head);
+            sbTree.setHead(head);
         }
-
         return sbTree;
     }
 
-    private static Item pollAndCreateItem(PriorityQueue<Map.Entry<String, Integer>> priorityQueue) {
-        Map.Entry<String, Integer> e = priorityQueue.poll();
-        return new Item(e.getKey(), e.getValue());
+    private static PriorityQueue<Item> createItemPriorityQueue(Map<String, Integer> charsFrequencies) {
+        PriorityQueue<Item> priorityQueue = new PriorityQueue<>((o1, o2) -> o1.getF().compareTo(o2.getF()));
+        Set<Item> items = charsFrequencies.entrySet().stream().map(e -> new Item(e.getKey(), e.getValue())).collect(Collectors.toSet());
+        priorityQueue.addAll(items);
+        return priorityQueue;
     }
 
 
