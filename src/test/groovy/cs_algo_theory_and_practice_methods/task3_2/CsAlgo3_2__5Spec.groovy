@@ -17,6 +17,7 @@ class CsAlgo3_2__5Spec extends Specification {
         "a"        || "0"
         "k"        || "0"
         "ab"       || "01"
+        "aaaaa"    || "00000"
         "abacabad" || "01001100100111"
 
 

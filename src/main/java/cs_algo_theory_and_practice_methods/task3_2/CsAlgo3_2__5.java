@@ -6,7 +6,7 @@ import java.util.*;
  * Created by rurik on 14.06.2016.
  */
 public class CsAlgo3_2__5 {
-    private static Map<String, String> encodeMap=new HashMap<>();
+    private static Map<String, String> encodeMap = new HashMap<>();
 
     public static void main(String[] args) {
         Scanner reader = new Scanner(System.in);
@@ -14,7 +14,7 @@ public class CsAlgo3_2__5 {
 
         String encodedStr = process(str);
 
-        System.out.print(encodeMap.keySet().size()+" ");
+        System.out.print(encodeMap.keySet().size() + " ");
         System.out.println(encodedStr.length());
         encodeMap.keySet().forEach(k -> System.out.println(k + ": " + encodeMap.get(k)));
         System.out.println(encodedStr);
@@ -24,7 +24,7 @@ public class CsAlgo3_2__5 {
 
     public static String process(String str) {
         if (str.length() == 1) {
-            encodeMap.put(str,"0");
+            encodeMap.put(str, "0");
             return "0";
         }
         Map<String, Integer> charsFrequencies = getCharsFrequencies(str);
@@ -39,6 +39,12 @@ public class CsAlgo3_2__5 {
 
     private static Map<String, String> getEncodeMap(Map<String, Integer> charsFrequencies) {
         Map<String, String> res = new HashMap<>();
+        if (charsFrequencies.keySet().size() == 1) {
+            String str = (String) charsFrequencies.keySet().toArray()[0];
+            res.put(str, "0");
+            return res;
+        }
+
         StrongBinaryTree sbTree = buildTree(charsFrequencies);
         StringBuilder code = new StringBuilder("");
         Item currentItem = sbTree.getHead();
@@ -75,10 +81,11 @@ public class CsAlgo3_2__5 {
     }
 
     private static StrongBinaryTree buildTree(Map<String, Integer> charsFrequencies) {
+        StrongBinaryTree sbTree = new StrongBinaryTree();
+
         PriorityQueue<Map.Entry<String, Integer>> priorityQueue = new PriorityQueue<>((o1, o2) -> o1.getValue().compareTo(o2.getValue()));
         priorityQueue.addAll(charsFrequencies.entrySet());
 
-        StrongBinaryTree sbTree = new StrongBinaryTree();
         while (!priorityQueue.isEmpty()) {
             if (sbTree.getHead() == null) {
                 Item l = pollAndCreateItem(priorityQueue);
