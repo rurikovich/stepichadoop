@@ -6,7 +6,7 @@ import java.util.*;
  * Created by rurik on 14.06.2016.
  */
 public class CsAlgo3_2__5 {
-    private static Map<String, String> encodeMap;
+    private static Map<String, String> encodeMap=new HashMap<>();
 
     public static void main(String[] args) {
         Scanner reader = new Scanner(System.in);
@@ -14,9 +14,9 @@ public class CsAlgo3_2__5 {
 
         String encodedStr = process(str);
 
-        System.out.print(encodeMap.keySet().size());
+        System.out.print(encodeMap.keySet().size()+" ");
         System.out.println(encodedStr.length());
-        encodeMap.keySet().forEach(k -> System.out.println(k + ":" + encodeMap.get(k)));
+        encodeMap.keySet().forEach(k -> System.out.println(k + ": " + encodeMap.get(k)));
         System.out.println(encodedStr);
 
 
@@ -24,6 +24,7 @@ public class CsAlgo3_2__5 {
 
     public static String process(String str) {
         if (str.length() == 1) {
+            encodeMap.put(str,"0");
             return "0";
         }
         Map<String, Integer> charsFrequencies = getCharsFrequencies(str);
@@ -104,5 +105,65 @@ public class CsAlgo3_2__5 {
         return new Item(e.getKey(), e.getValue());
     }
 
+
+    private static class StrongBinaryTree {
+        private Item head;
+
+        public Item getHead() {
+            return head;
+        }
+
+        public void setHead(Item head) {
+            this.head = head;
+        }
+    }
+
+    private static class Item {
+        private String value;
+        private Integer f;
+
+        private Item left;
+        private Item right;
+        private Item parent;
+
+        public Item(String value, Integer f) {
+            this.value = value;
+            this.f = f;
+        }
+
+        public Item(Integer f, Item left, Item right) {
+            this.f = f;
+            this.left = left;
+            this.right = right;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public Integer getF() {
+            return f;
+        }
+
+        public Item getLeft() {
+            return left;
+        }
+
+        public Item getRight() {
+            return right;
+        }
+
+        public Item getParent() {
+            return parent;
+        }
+
+        public void setParent(Item parent) {
+            this.parent = parent;
+        }
+
+        public boolean isLeaf() {
+            return left != null && right != null;
+        }
+    }
 
 }
