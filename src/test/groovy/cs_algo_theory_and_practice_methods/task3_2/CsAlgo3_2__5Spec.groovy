@@ -13,8 +13,10 @@ class CsAlgo3_2__5Spec extends Specification {
         CsAlgo3_2__5.process(str) == encodedStr
 
         where:
-        str || encodedStr
-        "a" || "0"
+        str        || encodedStr
+        "a"        || "0"
+        "k"        || "0"
+        "ab"       || "01"
         "abacabad" || "01001100100111"
 
 
