@@ -7,11 +7,15 @@ import java.util.stream.Collectors;
  * Created by rurik on 14.06.2016.
  */
 public class CsAlgo3_2__5 {
+    public static final String ZERO = "0";
+    public static final String ONE = "1";
     private static Map<String, String> encodeMap = new HashMap<>();
 
     public static void main(String[] args) {
         Scanner reader = new Scanner(System.in);
         String str = reader.next();
+
+        encodeMap.clear();
 
         String encodedStr = process(str);
 
@@ -25,11 +29,11 @@ public class CsAlgo3_2__5 {
 
     public static String process(String str) {
         if (str.length() == 1) {
-            encodeMap.put(str, "0");
-            return "0";
+            encodeMap.put(str, ZERO);
+            return ZERO;
         }
         Map<String, Integer> charsFrequencies = getCharsFrequencies(str);
-        encodeMap = getEncodeMap(charsFrequencies);
+        calculateEncodeMap(charsFrequencies);
         StringBuilder encodedStr = new StringBuilder("");
         for (int i = 0; i < str.length(); i++) {
             String ch = str.substring(i, i + 1);
@@ -38,34 +42,43 @@ public class CsAlgo3_2__5 {
         return encodedStr.toString();
     }
 
-    private static Map<String, String> getEncodeMap(Map<String, Integer> charsFrequencies) {
-        Map<String, String> res = new HashMap<>();
+
+    private static void calculateEncodeMap(Map<String, Integer> charsFrequencies) {
         if (charsFrequencies.keySet().size() == 1) {
             String str = (String) charsFrequencies.keySet().toArray()[0];
-            res.put(str, "0");
-            return res;
+            encodeMap.put(str, ZERO);
         }
-
         StrongBinaryTree sbTree = buildTree(charsFrequencies);
-        StringBuilder code = new StringBuilder("");
-        Item currentItem = sbTree.getHead();
-        boolean isToLeft = true;
-        Set<String> charsToProcess = charsFrequencies.keySet();
+        String code = "";
+        processTreeItem(sbTree.getHead(), code);
+    }
 
-        while (!charsToProcess.isEmpty()) {
-            if (currentItem.getValue() == null) {
-                currentItem = isToLeft ? currentItem.getLeft() : currentItem.getRight();
-                code.append(isToLeft ? "0" : "1");
-                isToLeft = !isToLeft;
-            } else {
-                String value = currentItem.getValue();
-                res.put(value, code.toString());
-                code.deleteCharAt(code.length() - 1);
-                charsToProcess.remove(value);
-                currentItem = currentItem.getParent();
-            }
+
+    private static void processTreeItem(Item item, String code) {
+        processItemValue(item, code);
+        Item left = item.getLeft();
+        Item right = item.getRight();
+        if (left != null) {
+            processTreeItem(left, code + ZERO);
         }
-        return res;
+        if (right != null) {
+            processTreeItem(right, code + ONE);
+        }
+
+    }
+
+    private static void processItemValue(Item item, String code) {
+        String value = item.getValue();
+        if (value != null) {
+            encodeMap.put(value, code);
+        }
+    }
+
+
+    private static void deleteLastChar(StringBuilder code) {
+        if (code.length() > 0) {
+            code.deleteCharAt(code.length() - 1);
+        }
     }
 
     private static Map<String, Integer> getCharsFrequencies(String str) {
@@ -84,7 +97,7 @@ public class CsAlgo3_2__5 {
     private static StrongBinaryTree buildTree(Map<String, Integer> charsFrequencies) {
         StrongBinaryTree sbTree = new StrongBinaryTree();
         PriorityQueue<Item> priorityQueue = createItemPriorityQueue(charsFrequencies);
-        while (priorityQueue.size()>=2) {
+        while (priorityQueue.size() >= 2) {
             Item l = priorityQueue.poll();
             Item r = priorityQueue.poll();
             Item head = new Item(l.getF() + r.getF(), l, r);
@@ -160,7 +173,17 @@ public class CsAlgo3_2__5 {
         }
 
         public boolean isLeaf() {
-            return left != null && right != null;
+            return left == null && right == null;
+        }
+
+        public void rmLeft() {
+            left.setParent(null);
+            left = null;
+        }
+
+        public void rmRight() {
+            right.setParent(null);
+            right = null;
         }
     }
 
