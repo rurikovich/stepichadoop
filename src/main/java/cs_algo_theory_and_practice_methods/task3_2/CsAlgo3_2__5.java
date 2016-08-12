@@ -9,25 +9,23 @@ import java.util.stream.Collectors;
 public class CsAlgo3_2__5 {
     public static final String ZERO = "0";
     public static final String ONE = "1";
-    private static Map<String, String> encodeMap = new HashMap<>();
+    private Map<String, String> encodeMap = new HashMap<>();
 
     public static void main(String[] args) {
         Scanner reader = new Scanner(System.in);
         String str = reader.next();
 
-        encodeMap.clear();
+        CsAlgo3_2__5 algo = new CsAlgo3_2__5();
+        String encodedStr = algo.process(str);
 
-        String encodedStr = process(str);
-
-        System.out.print(encodeMap.keySet().size() + " ");
+        System.out.print(algo.encodeMap.keySet().size() + " ");
         System.out.println(encodedStr.length());
-        encodeMap.keySet().forEach(k -> System.out.println(k + ": " + encodeMap.get(k)));
+        algo.encodeMap.keySet().forEach(k -> System.out.println(k + ": " + algo.encodeMap.get(k)));
         System.out.println(encodedStr);
-
-
     }
 
-    public static String process(String str) {
+    public String process(String str) {
+        encodeMap.clear();
         if (str.length() == 1) {
             encodeMap.put(str, ZERO);
             return ZERO;
@@ -43,45 +41,41 @@ public class CsAlgo3_2__5 {
     }
 
 
-    private static void calculateEncodeMap(Map<String, Integer> charsFrequencies) {
+    private void calculateEncodeMap(Map<String, Integer> charsFrequencies) {
         if (charsFrequencies.keySet().size() == 1) {
             String str = (String) charsFrequencies.keySet().toArray()[0];
             encodeMap.put(str, ZERO);
+        }else{
+            StrongBinaryTree sbTree = buildTree(charsFrequencies);
+            String code = "";
+            processTreeItem(sbTree.getHead(), code);
         }
-        StrongBinaryTree sbTree = buildTree(charsFrequencies);
-        String code = "";
-        processTreeItem(sbTree.getHead(), code);
     }
 
 
-    private static void processTreeItem(Item item, String code) {
-        processItemValue(item, code);
+    private void processTreeItem(Item item, String code) {
+
         Item left = item.getLeft();
         Item right = item.getRight();
         if (left != null) {
             processTreeItem(left, code + ZERO);
         }
+        processItemValue(item, code);
+
         if (right != null) {
             processTreeItem(right, code + ONE);
         }
 
     }
 
-    private static void processItemValue(Item item, String code) {
+    private void processItemValue(Item item, String code) {
         String value = item.getValue();
         if (value != null) {
             encodeMap.put(value, code);
         }
     }
 
-
-    private static void deleteLastChar(StringBuilder code) {
-        if (code.length() > 0) {
-            code.deleteCharAt(code.length() - 1);
-        }
-    }
-
-    private static Map<String, Integer> getCharsFrequencies(String str) {
+    private Map<String, Integer> getCharsFrequencies(String str) {
         Map<String, Integer> res = new HashMap<>();
         for (int i = 0; i < str.length(); i++) {
             String c = str.substring(i, i + 1);
@@ -94,7 +88,7 @@ public class CsAlgo3_2__5 {
         return res;
     }
 
-    private static StrongBinaryTree buildTree(Map<String, Integer> charsFrequencies) {
+    private StrongBinaryTree buildTree(Map<String, Integer> charsFrequencies) {
         StrongBinaryTree sbTree = new StrongBinaryTree();
         PriorityQueue<Item> priorityQueue = createItemPriorityQueue(charsFrequencies);
         while (priorityQueue.size() >= 2) {
@@ -109,7 +103,7 @@ public class CsAlgo3_2__5 {
         return sbTree;
     }
 
-    private static PriorityQueue<Item> createItemPriorityQueue(Map<String, Integer> charsFrequencies) {
+    private PriorityQueue<Item> createItemPriorityQueue(Map<String, Integer> charsFrequencies) {
         PriorityQueue<Item> priorityQueue = new PriorityQueue<>((o1, o2) -> o1.getF().compareTo(o2.getF()));
         Set<Item> items = charsFrequencies.entrySet().stream().map(e -> new Item(e.getKey(), e.getValue())).collect(Collectors.toSet());
         priorityQueue.addAll(items);

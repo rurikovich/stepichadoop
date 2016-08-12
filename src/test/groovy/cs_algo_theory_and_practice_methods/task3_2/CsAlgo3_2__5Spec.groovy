@@ -10,7 +10,7 @@ class CsAlgo3_2__5Spec extends Specification {
 
     def "tests works fine"() {
         expect:
-        CsAlgo3_2__5.process(str) == encodedStr
+        new CsAlgo3_2__5().process(str) == encodedStr
 
         where:
         str                         || encodedStr
@@ -19,7 +19,7 @@ class CsAlgo3_2__5Spec extends Specification {
         "ab"                        || "01"
         "aaaaa"                     || "00000"
         "abacabad"                  || "01001100100111"
-        "beep boop beer!"           || "0011110101000001101101010000111110101011"
+        "beepxboopxbeerz"           || "0011110101000001101101010000111110101011"
         "aaassssdddddffffffggggggg" || "110110110111111111111000000000001010101010110101010101010"
 
 
