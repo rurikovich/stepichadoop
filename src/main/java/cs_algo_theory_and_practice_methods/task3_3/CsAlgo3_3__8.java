@@ -7,11 +7,14 @@ import java.util.*;
  */
 public class CsAlgo3_3__8 {
 
+    public static final String INSERT = "Insert";
+    public static final String EXTRACT_MAX = "ExtractMax";
+
     public static void main(String[] args) {
         List<String> commands = new ArrayList<>();
         Scanner reader = new Scanner(System.in);
         int n = reader.nextInt();
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i <= n; i++) {
             commands.add(reader.nextLine());
         }
         List<Integer> res = process(commands);
@@ -19,7 +22,20 @@ public class CsAlgo3_3__8 {
     }
 
     static List<Integer> process(List<String> commands) {
-        return null;
+        MyPriorityQuery priorityQuery = new MyPriorityQuery();
+
+        ArrayList<Integer> output = new ArrayList<>();
+        for (String c : commands) {
+            if (c.startsWith(INSERT)) {
+                int value = Integer.parseInt(c.split(" ")[1]);
+                priorityQuery.insert(value);
+            }
+            if (c.startsWith(EXTRACT_MAX)) {
+                int value = priorityQuery.extractMax();
+                output.add(value);
+            }
+        }
+        return output;
     }
 
 
@@ -32,14 +48,14 @@ public class CsAlgo3_3__8 {
         }
 
         public Integer extractMax() {
-            if (arr.isEmpty()) {
-                return null;
+            if (!arr.isEmpty()) {
+                Integer max = arr.get(0);
+                arr.set(0, getLast());
+                removeLast();
+                siftDownSiftDown(0);
+                return max;
             }
-            Integer max = arr.get(0);
-            arr.set(0, getLast());
-            removeLast();
-            siftDownSiftDown(0);
-            return max;
+            return null;
         }
 
         private void siftUpSiftUp(int index) {
@@ -50,13 +66,45 @@ public class CsAlgo3_3__8 {
             }
         }
 
+        private void siftDownSiftDown(int index) {
+            int i = index;
+            while (parentLargerThenChilds(i)) {
+                int leftChildIndex = 2 * i;
+                int rightChildIndex = 2 * i + 1;
+
+                int maxIndex = -1;
+                if (isIndexInArr(leftChildIndex)) {
+                    maxIndex = leftChildIndex;
+                }
+
+                if (isIndexInArr(rightChildIndex)) {
+                    if (arr.get(rightChildIndex) > arr.get(leftChildIndex)) {
+                        maxIndex = rightChildIndex;
+                    }
+                }
+
+                if (maxIndex >= 0) {
+                    switchPlaces(i, maxIndex);
+                    i = maxIndex;
+                }
+
+            }
+        }
+
+        private boolean isIndexInArr(int leftChildIndex) {
+            return leftChildIndex < arr.size();
+        }
+
+        private boolean parentLargerThenChilds(int i) {
+            int leftChildIndex = 2 * i;
+            int rightChildIndex = 2 * i + 1;
+            return (isIndexInArr(leftChildIndex) && arr.get(i) < arr.get(leftChildIndex)) || (isIndexInArr(rightChildIndex) && arr.get(i) < arr.get(rightChildIndex));
+        }
+
         private void switchPlaces(int index, int parentIndex) {
             int a = arr.get(index);
             arr.set(index, arr.get(parentIndex));
             arr.set(parentIndex, a);
-        }
-
-        private void siftDownSiftDown(int index) {
         }
 
         private void removeLast() {
