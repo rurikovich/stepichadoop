@@ -37,38 +37,25 @@ public class CsAlgo5_1__4 {
     }
 
     private static Integer findIndex(List<Integer> arr, Integer number) {
-        Integer startIndex = 0;
-        Integer endIndex = arr.size() - 1;
-        if (arr.get(startIndex) > number || arr.get(endIndex) < number) {
+        Integer l = 0;
+        Integer r = arr.size() - 1;
+        if (arr.get(l) > number || arr.get(r) < number) {
             return -1;
         }
-
         Integer resultIndex = -1;
-        while (endIndex - startIndex > 1) {
-            Integer middleIndex = (startIndex + endIndex) / 2;
-            Integer middleNumber = arr.get(middleIndex);
-
-            if (middleNumber.equals(number)) {
-                resultIndex = middleIndex + 1;
+        while (l <= r) {
+            Integer m = (l + r) / 2;
+            Integer mNumber = arr.get(m);
+            if (mNumber.equals(number)) {
+                resultIndex = m + 1;
                 break;
+            }
+            if (mNumber > number) {
+                r = m - 1;
             } else {
-                if (middleNumber > number) {
-                    endIndex = middleIndex;
-                } else {
-                    startIndex = middleIndex;
-                }
+                l = m + 1;
             }
         }
-
-        if (arr.get(startIndex).equals(number)) {
-            resultIndex = startIndex + 1;
-        }
-        if (arr.get(endIndex).equals(number)) {
-            resultIndex = endIndex + 1;
-        }
-
         return resultIndex;
-
-
     }
 }
