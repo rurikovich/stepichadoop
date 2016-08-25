@@ -1,6 +1,5 @@
 package cs_algo_theory_and_practice_methods.task5_1;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -12,50 +11,63 @@ public class CsAlgo5_1__4 {
     public static void main(String[] args) {
         Scanner reader = new Scanner(System.in);
         int n = reader.nextInt();
-        ArrayList<Integer> sortedArr = new ArrayList<>();
+        int[] sortedArr = new int[n];
         for (int i = 0; i < n; i++) {
-            sortedArr.add(reader.nextInt());
+            sortedArr[i] = reader.nextInt();
         }
         int k = reader.nextInt();
-        ArrayList<Integer> arrToTest = new ArrayList<>();
+        int[] arrToTest = new int[k];
         for (int i = 0; i < k; i++) {
-            arrToTest.add(reader.nextInt());
+            arrToTest[i] = reader.nextInt();
         }
-        ArrayList<Integer> indexes = process(sortedArr, arrToTest);
+        int[] indexes = process(sortedArr, arrToTest);
         StringBuilder sb = new StringBuilder("");
-        indexes.forEach(i -> sb.append(i).append(i != indexes.size() - 1 ? " " : ""));
+
+        for (int i = 0; i < indexes.length; i++) {
+            int index = indexes[i];
+            sb.append(index).append(index != indexes.length - 1 ? " " : "");
+        }
         System.out.print(sb.toString());
     }
 
-    static ArrayList<Integer> process(ArrayList<Integer> sortedArr, ArrayList<Integer> arrToTest) {
-        ArrayList<Integer> indexes = new ArrayList<>();
-        for (Integer number : arrToTest) {
-            Integer index = findIndex(sortedArr, number);
-            indexes.add(index);
+    static int[] process(List<Integer> sortedArr, List<Integer> arrToTest) {
+        return process(toIntArr(sortedArr), toIntArr(arrToTest));
+    }
+
+    static int[] toIntArr(List<Integer> integers) {
+        int n = integers.size();
+        int[] ret = new int[n];
+        for (int i = 0; i < n; i++) {
+            ret[i] = integers.get(i);
+        }
+        return ret;
+    }
+
+    static int[] process(int[] sortedArr, int[] arrToTest) {
+        int n = arrToTest.length;
+        int[] indexes = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            int number = arrToTest[i];
+            int index = findIndex(sortedArr, number);
+            indexes[i] = index;
         }
         return indexes;
     }
 
-    private static Integer findIndex(List<Integer> arr, Integer number) {
-        Integer l = 0;
-        Integer r = arr.size() - 1;
-        if (arr.get(l) > number || arr.get(r) < number) {
-            return -1;
-        }
-        Integer resultIndex = -1;
-        while (l <= r) {
-            Integer m = (l + r) / 2;
-            Integer mNumber = arr.get(m);
-            if (mNumber.equals(number)) {
-                resultIndex = m + 1;
-                break;
-            }
-            if (mNumber > number) {
+    private static int findIndex(int[] a, int x) {
+        int l = 0;
+        int r = a.length - 1;
+        while (r >= l) {
+            int m = (l + r) >> 1;
+            if (a[m] == x) {
+                return m+1;
+            } else if (a[m] > x) {
                 r = m - 1;
             } else {
                 l = m + 1;
             }
         }
-        return resultIndex;
+        return -1;
     }
 }
