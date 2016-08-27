@@ -7,7 +7,7 @@ import java.util.*;
  */
 public class CsAlgo5_4__5 {
 
-    private int invCount = 0;
+    private long invCount = 0;
 
     public static void main(String[] args) {
         Scanner reader = new Scanner(System.in);
@@ -17,25 +17,35 @@ public class CsAlgo5_4__5 {
             arr.add(reader.nextInt());
         }
 
-        int inv = new CsAlgo5_4__5().process(arr);
+        long inv = new CsAlgo5_4__5().process(arr);
         System.out.print(inv);
     }
 
-    int process(ArrayList<Integer> arr) {
+    long process(ArrayList<Integer> arr) {
         List<Integer> res = getSortedArr(arr);
         return invCount;
     }
 
     private List<Integer> getSortedArr(ArrayList<Integer> arr) {
-        Queue<List<Integer>> queue = new LinkedList<>();
+        Queue<List<Integer>> outQueue = new LinkedList<>();
         for (int i = 0; i < arr.size(); i++) {
-            queue.offer(arr.subList(i, i + 1));
+            outQueue.offer(arr.subList(i, i + 1));
         }
-        while (queue.size() > 1) {
-            List<Integer> merge = merge(queue.poll(), queue.poll());
-            queue.offer(merge);
+
+        Queue<List<Integer>> inQueue = new LinkedList<>();
+
+        while (outQueue.size() + inQueue.size() > 1) {
+            List<Integer> merge = merge(outQueue.poll(), outQueue.poll());
+            inQueue.offer(merge);
+            if (outQueue.size() == 1) {
+                inQueue.offer(outQueue.poll());
+            }
+            if (outQueue.isEmpty()) {
+                outQueue = inQueue;
+                inQueue = new LinkedList<>();
+            }
         }
-        return queue.poll();
+        return outQueue.poll();
     }
 
 
@@ -55,25 +65,23 @@ public class CsAlgo5_4__5 {
         for (int i = 0; i < n; i++) {
             int l = lArr.get(lIndex);
             int r = rArr.get(rIndex);
-            if (l < r) {
+            if (l <= r) {
                 resArr.add(l);
                 if (isLastIndex(lArr, lIndex)) {
-                    List<Integer> tail = getTail(rArr, rIndex);
-                    resArr.addAll(tail);
-                    invCount += tail.size();
+                    resArr.addAll(getTail(rArr, rIndex));
                     return resArr;
                 } else {
                     lIndex++;
                 }
             } else {
                 resArr.add(r);
-                invCount++;
+                invCount += getTail(lArr, lIndex).size();
                 if (isLastIndex(rArr, rIndex)) {
                     resArr.addAll(getTail(lArr, lIndex));
                     return resArr;
-                } else {
-                    rIndex++;
                 }
+                rIndex++;
+
             }
         }
         return resArr;

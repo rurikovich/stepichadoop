@@ -15,6 +15,7 @@ class CsAlgo5_4__5Spec extends Specification {
         where:
         arr             || inv
         [2, 3, 9, 2, 9] || 2
+        [5, 4, 3, 2, 1] || 10
     }
 
 
