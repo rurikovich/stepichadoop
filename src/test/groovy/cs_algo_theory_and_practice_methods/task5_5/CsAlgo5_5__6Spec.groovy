@@ -31,6 +31,15 @@ class CsAlgo5_5__6Spec extends Specification {
         [4, 4, 4, 4]              || 3
     }
 
+    def "quickSort works fine"() {
+        expect:
+        new CsAlgo5_5__6().quickSort(arr) == sortedArr
+
+        where:
+        arr                || sortedArr
+        [1, 3, 2, 4, 5, 2] || [1, 2, 2, 3, 4, 5]
+        [6, 5, 4, 3, 2, 1] || [1, 2, 3, 4, 5, 6]
+    }
 }
 
 

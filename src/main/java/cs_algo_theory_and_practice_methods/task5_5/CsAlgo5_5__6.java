@@ -29,6 +29,12 @@ public class CsAlgo5_5__6 {
         return null;
     }
 
+
+    List<Integer> quickSort(List<Integer> arr) {
+        quickSort(arr, 0, arr.size() - 1);
+        return arr;
+    }
+
     void quickSort(List<Integer> arr, int l, int r) {
         if (l >= r) {
             return;
