@@ -26,6 +26,10 @@ public class CsAlgo5_5__6 {
     }
 
     List<Integer> process(List<Integer> aArr, List<Integer> bArr, List<Integer> points) {
+        List<Integer> sortedAArr = quickSort(aArr);
+        List<Integer> sortedBArr = quickSort(bArr);
+        List<Integer> sortedPoints = quickSort(points);
+
         return null;
     }
 
