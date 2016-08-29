@@ -29,10 +29,30 @@ public class CsAlgo5_5__6 {
         return null;
     }
 
-    List<Integer> quickSort(List<Integer> arr) {
+    void quickSort(List<Integer> arr, int l, int r) {
+        if (l >= r) {
+            return;
+        }
+        int m = partition(arr, l, r);
+        quickSort(arr, l, m - 1);
+        quickSort(arr, m + 1, r);
+    }
 
 
-        return null;
+    public int partition(List<Integer> arr, int l, int r) {
+        int x = arr.get(l);
+        int j = l;
+        for (int i = l + 1; i <= r; i++) {
+            int current = arr.get(i);
+            if (current <= x) {
+                arr.set(i, arr.get(j + 1));
+                arr.set(j + 1, current);
+                j++;
+            }
+        }
+        arr.set(l, arr.get(j));
+        arr.set(j, x);
+        return j;
     }
 
 
