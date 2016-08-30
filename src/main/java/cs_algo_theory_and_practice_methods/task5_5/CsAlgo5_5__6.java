@@ -9,37 +9,49 @@ public class CsAlgo5_5__6 {
         Scanner reader = new Scanner(System.in);
         int n = reader.nextInt();
         int m = reader.nextInt();
-        ArrayList<Integer> aArr = new ArrayList<>();
-        ArrayList<Integer> bArr = new ArrayList<>();
+
+        ArrayList<Item> items = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            aArr.add(reader.nextInt());
-            bArr.add(reader.nextInt());
+            items.add(new Item(reader.nextInt(), i, Item.START));
+            items.add(new Item(reader.nextInt(), i, Item.END));
         }
 
-        ArrayList<Integer> points = new ArrayList<>();
         for (int i = 0; i < m; i++) {
-            points.add(reader.nextInt());
+            items.add(new Item(reader.nextInt(), i, Item.POINT));
         }
 
-        List<Integer> res = new CsAlgo5_5__6().process(aArr, bArr, points);
-        res.forEach(System.out::print);
+        int[] res = new CsAlgo5_5__6().process(items, m);
+        for (int i = 0; i < res.length; i++) {
+            System.out.print(res[i] + " ");
+        }
     }
 
-    List<Integer> process(List<Integer> aArr, List<Integer> bArr, List<Integer> points) {
-        List<Integer> sortedAArr = quickSort(aArr);
-        List<Integer> sortedBArr = quickSort(bArr);
-        List<Integer> sortedPoints = quickSort(points);
-
-        return null;
+    int[] process(ArrayList<Item> items, int m) {
+        int[] res = new int[m];
+        quickSort(items);
+        int count = 0;
+        for (int i = 0; i < items.size(); i++) {
+            Item item = items.get(i);
+            if (item.type == Item.START) {
+                count++;
+            }
+            if (item.type == Item.END) {
+                count--;
+            }
+            if (item.type == Item.POINT) {
+                res[item.pos] = count;
+            }
+        }
+        return res;
     }
 
 
-    List<Integer> quickSort(List<Integer> arr) {
+    List<Item> quickSort(List<Item> arr) {
         quickSort(arr, 0, arr.size() - 1);
         return arr;
     }
 
-    void quickSort(List<Integer> arr, int l, int r) {
+    void quickSort(List<Item> arr, int l, int r) {
         if (l >= r) {
             return;
         }
@@ -49,12 +61,13 @@ public class CsAlgo5_5__6 {
     }
 
 
-    public int partition(List<Integer> arr, int l, int r) {
-        int x = arr.get(l);
+    public int partition(List<Item> arr, int l, int r) {
+        Item x = arr.get(l);
         int j = l;
+        int jEq = l;
         for (int i = l + 1; i <= r; i++) {
-            int current = arr.get(i);
-            if (current <= x) {
+            Item current = arr.get(i);
+            if (current.lessOrEquals(x)) {
                 arr.set(i, arr.get(j + 1));
                 arr.set(j + 1, current);
                 j++;
@@ -65,5 +78,25 @@ public class CsAlgo5_5__6 {
         return j;
     }
 
+
+    private static class Item {
+        public static final int START = 0;
+        public static final int POINT = 1;
+        public static final int END = 2;
+
+        int x;
+        int pos;
+        int type;
+
+        public Item(int x, int pos, int type) {
+            this.x = x;
+            this.pos = pos;
+            this.type = type;
+        }
+
+        public boolean lessOrEquals(Item item) {
+            return (this.x < item.x) || (this.x == item.x && this.type <= item.type);
+        }
+    }
 
 }
