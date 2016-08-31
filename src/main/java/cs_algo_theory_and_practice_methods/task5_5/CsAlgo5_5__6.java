@@ -62,20 +62,31 @@ public class CsAlgo5_5__6 {
 
 
     public int partition(List<Item> arr, int l, int r) {
+        switchToRandomItem(arr, l, r);
+
         Item x = arr.get(l);
         int j = l;
-        int jEq = l;
         for (int i = l + 1; i <= r; i++) {
             Item current = arr.get(i);
             if (current.lessOrEquals(x)) {
-                arr.set(i, arr.get(j + 1));
-                arr.set(j + 1, current);
+                switchItems(arr, i, j + 1);
                 j++;
             }
         }
-        arr.set(l, arr.get(j));
-        arr.set(j, x);
+        switchItems(arr, l, j);
         return j;
+    }
+
+    private void switchToRandomItem(List<Item> arr, int l, int r) {
+        Random random = new Random();
+        int randomIndex = l + random.nextInt(r - l + 1);
+        switchItems(arr, l, randomIndex);
+    }
+
+    private void switchItems(List<Item> arr, int i, int j) {
+        Item x = arr.get(i);
+        arr.set(i, arr.get(j));
+        arr.set(j, x);
     }
 
 
