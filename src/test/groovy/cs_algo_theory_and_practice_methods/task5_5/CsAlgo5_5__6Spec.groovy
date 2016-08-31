@@ -16,7 +16,9 @@ class CsAlgo5_5__6Spec extends Specification {
         where:
         aArr   | bArr    | points     || res
         [0, 7] | [5, 10] | [1, 6, 11] || [1, 0, 0]
+
     }
+
 
     def "partition works fine"() {
         expect:

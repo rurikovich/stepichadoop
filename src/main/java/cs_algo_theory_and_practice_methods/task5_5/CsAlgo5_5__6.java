@@ -20,14 +20,30 @@ public class CsAlgo5_5__6 {
             items.add(new Item(reader.nextInt(), i, Item.POINT));
         }
 
-        int[] res = new CsAlgo5_5__6().process(items, m);
+        Integer[] res = new CsAlgo5_5__6().process(items, m);
         for (int i = 0; i < res.length; i++) {
             System.out.print(res[i] + " ");
         }
     }
 
-    int[] process(ArrayList<Item> items, int m) {
-        int[] res = new int[m];
+    List<Integer> process(ArrayList<Integer> aArr, ArrayList<Integer> bArr, ArrayList<Integer> points) {
+        ArrayList<Item> items = new ArrayList<>();
+        for (int i = 0; i < aArr.size(); i++) {
+            items.add(new Item(aArr.get(i), i, Item.START));
+        }
+        for (int i = 0; i < bArr.size(); i++) {
+            items.add(new Item(bArr.get(i), i, Item.END));
+        }
+        for (int i = 0; i < points.size(); i++) {
+            items.add(new Item(points.get(i), i, Item.POINT));
+        }
+
+        Integer[] res = process(items, points.size());
+        return Arrays.asList(res);
+    }
+
+    Integer[] process(ArrayList<Item> items, int m) {
+        Integer[] res = new Integer[m];
         quickSort(items);
         int count = 0;
         for (int i = 0; i < items.size(); i++) {
@@ -79,7 +95,7 @@ public class CsAlgo5_5__6 {
 
     private void switchToRandomItem(List<Item> arr, int l, int r) {
         Random random = new Random();
-        int randomIndex = l + random.nextInt(r - l + 1);
+        int randomIndex = l + 1 + random.nextInt(r - l);
         switchItems(arr, l, randomIndex);
     }
 
