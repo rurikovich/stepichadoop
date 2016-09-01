@@ -68,18 +68,24 @@ public class CsAlgo5_5__6 {
     }
 
     void quickSort(List<Item> arr, int l, int r) {
-        if (l >= r) {
-            return;
+        while (l < r) {
+            int m = partition(arr, l, r);
+            int leftL = (m - 1) - l;
+            int rightL = r - (m + 1);
+
+            if (leftL < rightL) {
+                quickSort(arr, l, m - 1);
+                l = m + 1;
+            } else {
+                quickSort(arr, m + 1, r);
+                r = m - 1;
+            }
         }
-        int m = partition(arr, l, r);
-        quickSort(arr, l, m - 1);
-        quickSort(arr, m + 1, r);
     }
 
 
     public int partition(List<Item> arr, int l, int r) {
         switchToRandomItem(arr, l, r);
-
         Item x = arr.get(l);
         int j = l;
         for (int i = l + 1; i <= r; i++) {

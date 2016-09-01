@@ -1,6 +1,5 @@
 package cs_algo_theory_and_practice_methods.task5_5
 
-import cs_algo_theory_and_practice_methods.task5_5.CsAlgo5_5__6
 import spock.lang.Specification
 
 /**
