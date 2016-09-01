@@ -19,17 +19,14 @@ class CsAlgo5_5__6Spec extends Specification {
     }
 
 
-    def "partition works fine"() {
+    def "partitionInt works fine"() {
         expect:
-        new CsAlgo5_5__6().partition(arr, 0, arr.size() - 1) == m
+        new CsAlgo5_5__6().partitionInt(arr, 0, arr.size() - 1) == m
 
         where:
-        arr                       || m
-        [7, 1, 9, 4, 12, 6, 2, 9] || 4
-        [7, 1]                    || 1
-        [4, 3, 4, 5, 6, 7, 2]     || 3
-        [4, 5, 5, 6]              || 0
-        [4, 4, 4, 4]              || 3
+        arr                                || m
+        [7, 1, 9, 7, 12, 6, 7, 2, 7, 9, 1] || 4
+
     }
 
     def "quickSort works fine"() {

@@ -69,33 +69,63 @@ public class CsAlgo5_5__6 {
 
     void quickSort(List<Item> arr, int l, int r) {
         while (l < r) {
-            int m = partition(arr, l, r);
-            int leftL = (m - 1) - l;
-            int rightL = r - (m + 1);
+            int[] eqIndexes = partition(arr, l, r);
+            int lEq = eqIndexes[0] - 1;
+            int rEq = eqIndexes[1] + 1;
+            int leftL = lEq - l;
+            int rightL = r - rEq;
 
             if (leftL < rightL) {
-                quickSort(arr, l, m - 1);
-                l = m + 1;
+                quickSort(arr, l, lEq);
+                l = rEq;
             } else {
-                quickSort(arr, m + 1, r);
-                r = m - 1;
+                quickSort(arr, rEq, r);
+                r = lEq;
             }
         }
     }
 
 
-    public int partition(List<Item> arr, int l, int r) {
+    public int[] partition(List<Item> arr, int l, int r) {
         switchToRandomItem(arr, l, r);
         Item x = arr.get(l);
         int j = l;
+        int e = l;
         for (int i = l + 1; i <= r; i++) {
             Item current = arr.get(i);
-            if (current.lessOrEquals(x)) {
-                switchItems(arr, i, j + 1);
+            if (current.less(x)) {
+                switchItems(arr, i, e + 1);
+                switchItems(arr, j + 1, e + 1);
                 j++;
+                e++;
+            }
+            if (current.equals(x)) {
+                switchItems(arr, i, e + 1);
+                e++;
             }
         }
         switchItems(arr, l, j);
+        return new int[]{j, e};
+    }
+
+    public int partitionInt(List<Integer> arr, int l, int r) {
+        int x = arr.get(l);
+        int j = l;
+        int e = l;
+        for (int i = l + 1; i <= r; i++) {
+            int current = arr.get(i);
+            if (current < x) {
+                switchIntItems(arr, i, e + 1);
+                switchIntItems(arr, j + 1, e + 1);
+                j++;
+                e++;
+            }
+            if (current == x) {
+                switchIntItems(arr, i, e + 1);
+                e++;
+            }
+        }
+        switchIntItems(arr, l, j);
         return j;
     }
 
@@ -105,12 +135,18 @@ public class CsAlgo5_5__6 {
         switchItems(arr, l, randomIndex);
     }
 
+
     private void switchItems(List<Item> arr, int i, int j) {
         Item x = arr.get(i);
         arr.set(i, arr.get(j));
         arr.set(j, x);
     }
 
+    private void switchIntItems(List<Integer> arr, int i, int j) {
+        int x = arr.get(i);
+        arr.set(i, arr.get(j));
+        arr.set(j, x);
+    }
 
     private static class Item {
         public static final int START = 0;
@@ -127,8 +163,27 @@ public class CsAlgo5_5__6 {
             this.type = type;
         }
 
-        public boolean lessOrEquals(Item item) {
-            return (this.x < item.x) || (this.x == item.x && this.type <= item.type);
+        public boolean less(Item item) {
+            return (this.x < item.x) || (this.x == item.x && this.type < item.type);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Item item = (Item) o;
+
+            if (x != item.x) return false;
+            return type == item.type;
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result = x;
+            result = 31 * result + type;
+            return result;
         }
     }
 
