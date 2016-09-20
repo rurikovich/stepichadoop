@@ -3,6 +3,8 @@ package cs_algo_theory_and_practice_methods.task8_2;
 import java.util.Scanner;
 import java.util.Stack;
 
+import static java.lang.Integer.*;
+
 
 public class CsAlgo8_2__6 {
 
@@ -77,20 +79,35 @@ public class CsAlgo8_2__6 {
         int n = a.length;
         // d[i] - это число на которое оканциваяется  максимальная подполедовательность длины i
         int[] d = new int[n + 1];
-        int[] dIndex = new int[n + 1];
-        int[] aPrevIndex = new int[n];
-
         d[0] = -1;
         for (int i = 1; i <= n; i++) {
-            d[i] = Integer.MAX_VALUE;
+            d[i] = MAX_VALUE;
         }
+
+        int[] dIndex = new int[n + 1];
+        for (int i = 0; i < n + 1; i++) {
+            dIndex[i] = -1;
+        }
+
+        int[] aPrevIndex = new int[n];
+        for (int i = 0; i < n; i++) {
+            aPrevIndex[i] = -1;
+        }
+
 
         int maxJ = 1;
         for (int i = 0; i < n; i++) {
             for (int j = 1; j <= n; j++) {
                 if (d[j - 1] < a[i] && a[i] < d[j]) {
+                    if (i > 0) {
+                        if (d[j] == MAX_VALUE) {
+                            aPrevIndex[i] = dIndex[j - 1];
+                        } else {
+                            int jj = dIndex[j];
+                            aPrevIndex[i] = aPrevIndex[jj];
+                        }
+                    }
                     dIndex[j] = i;
-//                    aPrevIndex[]
                     d[j] = a[i];
 
                     if (j > maxJ) {
@@ -100,13 +117,19 @@ public class CsAlgo8_2__6 {
             }
         }
 
-        // восстановлением ответа
-//        for (int i = 0; i <; i++) {
-//
-//        }
+        //восстановлением ответа
+        int[] res = new int[maxJ];
 
+        int i = maxJ - 1;
+        int maxIndex = dIndex[maxJ];
+        int current = maxIndex;
+        while (current >= 0) {
+            res[i--] = current + 1;
+            current = aPrevIndex[current];
 
-        return new int[]{};
+        }
+
+        return res;
     }
 
 }
