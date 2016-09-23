@@ -1,12 +1,16 @@
 package cs_algo_theory_and_practice_methods.task8_2;
 
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Stack;
 
-import static java.lang.Integer.*;
+import static java.lang.Integer.MAX_VALUE;
 
 
 public class CsAlgo8_2__6 {
+
+    public static final int POS_INF = MAX_VALUE;
+    public static final int NEG_INF = -1;
 
     public static void main(String[] args) {
         Scanner reader = new Scanner(System.in);
@@ -76,60 +80,84 @@ public class CsAlgo8_2__6 {
 
 
     static int[] processNLogN(int[] a) {
-        int n = a.length;
         // d[i] - это число на которое оканциваяется  максимальная подполедовательность длины i
-        int[] d = new int[n + 1];
-        d[0] = -1;
-        for (int i = 1; i <= n; i++) {
-            d[i] = MAX_VALUE;
-        }
-
-        int[] dIndex = new int[n + 1];
-        for (int i = 0; i < n + 1; i++) {
-            dIndex[i] = -1;
-        }
-
-        int[] aPrevIndex = new int[n];
-        for (int i = 0; i < n; i++) {
-            aPrevIndex[i] = -1;
-        }
-
+        int n = a.length;
+        int[] d = initDArray(n + 1, POS_INF, NEG_INF);
+        int[] dIndex = initArray(n + 1, NEG_INF);
+        int[] aPrev = initArray(n, NEG_INF);
 
         int maxJ = 1;
         for (int i = 0; i < n; i++) {
-            for (int j = 1; j <= n; j++) {
-                if (d[j - 1] < a[i] && a[i] < d[j]) {
-                    if (i > 0) {
-                        if (d[j] == MAX_VALUE) {
-                            aPrevIndex[i] = dIndex[j - 1];
-                        } else {
-                            int jj = dIndex[j];
-                            aPrevIndex[i] = aPrevIndex[jj];
-                        }
-                    }
-                    dIndex[j] = i;
-                    d[j] = a[i];
-
-                    if (j > maxJ) {
-                        maxJ = j;
+            int j = findJ(d, a[i]);
+            if (d[j - 1] <= a[i] && a[i] < d[j]) {
+                if (i > 0) {
+                    if (d[j] == POS_INF) {
+                        aPrev[i] = dIndex[j - 1];
+                    } else {
+                        int jj = dIndex[j];
+                        aPrev[i] = aPrev[jj];
                     }
                 }
+                dIndex[j] = i;
+                d[j] = a[i];
+
+                maxJ = j > maxJ ? j : maxJ;
             }
         }
 
         //восстановлением ответа
         int[] res = new int[maxJ];
-
         int i = maxJ - 1;
         int maxIndex = dIndex[maxJ];
         int current = maxIndex;
         while (current >= 0) {
-            res[i--] = current + 1;
-            current = aPrevIndex[current];
-
+            res[i--] = a[current];
+            current = aPrev[current];
         }
-
         return res;
+    }
+
+    private static int findJ(int[] d, int key) {
+        int j = myBinarySearch(d, key);
+        if (aiNotExist(j)) {
+            j = -j;
+        }
+        return j;
+    }
+
+    private static boolean aiNotExist(int j) {
+        return j < 0;
+    }
+
+    private static int[] initDArray(int n, int initValue, int first) {
+        int[] d = initArray(n, initValue);
+        d[0] = first;
+        return d;
+    }
+
+    private static int[] initArray(int n, int initValue) {
+        int[] res = new int[n];
+        for (int i = 0; i < n; i++) {
+            res[i] = initValue;
+        }
+        return res;
+    }
+
+
+    private static int myBinarySearch(int[] arr, int key) {
+        int l = 0;
+        int r = arr.length - 1;
+        while (r >= l) {
+            int m = (l + r) >> 1;//(l + r) /2
+            if (arr[m] == key) {
+                return m + 1;
+            } else if (arr[m] > key) {
+                r = m - 1;
+            } else {
+                l = m + 1;
+            }
+        }
+        return -l;
     }
 
 }

@@ -24,9 +24,10 @@ class CsAlgo8_2__6Spec extends Specification {
         new CsAlgo8_2__6().processNLogN(convertIntegers(a)) == convertIntegers(sudquery)
 
         where:
-        a                           || sudquery
-        [1, 3, 5, 6, 7, 4, 8, 2, 9] || [1, 2, 3, 4, 5, 7, 9]
-        [5, 3, 4, 4, 2]             || [1, 3, 4, 5]
+        a                              || sudquery
+        [1, 3, 3, 5, 6, 7, 4, 8, 2, 9] || [1, 3, 3, 5, 6, 7, 8, 9]
+//        [1, 3, 5, 6, 7, 4, 8, 2, 9] || [7, 4, 2]
+//        [5, 3, 4, 4, 2]             || [5, 4, 4, 2]
 
     }
 
