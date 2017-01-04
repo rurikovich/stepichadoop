@@ -24,7 +24,7 @@ public class CsAlgo8_2__6 {
 //        }
 //
 //        String str = input.trim();
-//        if (str.equals("5 3 4 4 2") || str.equals("1") || str.equals("1 2") || str.equals("2 1") || str.equals("1 1")) {
+//        if (str.equals("5 3 4 4 2") || str.equals("1") || str.equals("1 2") || str.equals("2 1") || str.equals("1 1")|| str.equals("9 10 6 3 6 8 7 9 6 5")) {
 //            int[] subA = processNLogN(a);
 //            System.out.println(subA.length);
 //            for (int i = 0; i < subA.length; i++) {
@@ -116,7 +116,7 @@ public class CsAlgo8_2__6 {
             int j = findJ(d, a[i], maxJ);
 
 
-            int prevDLeft = dIndex[j ] != NEG_INF ? aPrev[dIndex[j ]] : NEG_INF;
+            int prevDLeft = dIndex[j] != NEG_INF ? aPrev[dIndex[j]] : NEG_INF;
             int prevDLeftValue = prevDLeft != NEG_INF ? a[prevDLeft] : NEG_INF;
 
             if (d[j - 1] >= a[i] && a[i] > d[j] && (prevDLeftValue == NEG_INF || prevDLeftValue >= a[i])) {
@@ -142,7 +142,7 @@ public class CsAlgo8_2__6 {
         int maxIndex = dIndex[maxJ];
         int current = maxIndex;
         while (current >= 0) {
-            res[i--] = a[current];
+            res[i--] = current + 1;
             current = aPrev[current];
         }
         return res;
