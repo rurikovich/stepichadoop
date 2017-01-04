@@ -8,7 +8,7 @@ import static javaBaseCourse.task_2.JavaBaseCourse2_2__3.*
  * Created by rurik on 01.02.15.
  */
 
-class JavaBaseCourse2_2__Spec extends Specification {
+class JavaBaseCourse2_2__3Spec extends Specification {
 
     def "charExpression works fine"() {
         expect:
