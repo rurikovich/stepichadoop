@@ -11,7 +11,9 @@ import java.util.Scanner;
 /**
  * Created by rurik on 09.01.2017.
  */
-public class StringReader {
+public class MyStringReader {
+
+
 
     public static String readAsString(InputStream inputStream, Charset charset) throws IOException {
         Reader reader = new InputStreamReader(inputStream, charset);
