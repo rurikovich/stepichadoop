@@ -14,8 +14,11 @@ public class CsAlgo2_1__2Test {
     public void checkStr() throws Exception {
         CsAlgo2_1__2 csAlgo2_1__2 = new CsAlgo2_1__2();
 
-        assertEquals(csAlgo2_1__2.checkStr("([](){([])})"),0);
-        assertEquals(csAlgo2_1__2.checkStr("()[]}"),5);
-        assertEquals(csAlgo2_1__2.checkStr("{{[()]]"),7);
+//        assertEquals(0, csAlgo2_1__2.checkStr("([](){([])})"));
+//        assertEquals(5, csAlgo2_1__2.checkStr("()[]}"));
+//        assertEquals(7, csAlgo2_1__2.checkStr("{{[()]]"));
+//        assertEquals(4, csAlgo2_1__2.checkStr("{{[("));
+//        assertEquals(0, csAlgo2_1__2.checkStr(""));
+        assertEquals(3, csAlgo2_1__2.checkStr("()({}"));
     }
 }
