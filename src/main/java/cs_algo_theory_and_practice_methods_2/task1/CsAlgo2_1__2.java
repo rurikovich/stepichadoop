@@ -19,22 +19,40 @@ public class CsAlgo2_1__2 {
         brackets.put("{", "}");
         brackets.put("[", "]");
 
-        Stack<String> stack = new Stack<>();
+        Stack<Pair> stack = new Stack<>();
         int i = 0;
         while (i < str.length()) {
             String bracket = str.substring(i, i + 1);
             if (brackets.containsKey(bracket)) {
-                stack.push(bracket);
+                stack.push(new Pair(bracket, i));
             } else if (brackets.values().contains(bracket)) {
-                if (stack.isEmpty() || !brackets.get(stack.pop()).equals(bracket)) {
+                if (stack.isEmpty() || !brackets.get(stack.pop().getBracket()).equals(bracket)) {
                     return i + 1;
                 }
             }
             i++;
         }
         if (!stack.isEmpty()) {
-            return stack.size();
+            return stack.peek().getIndex() + 1;
         }
         return 0;
+    }
+
+    private class Pair {
+        private String bracket;
+        private int index;
+
+        Pair(String bracket, int index) {
+            this.bracket = bracket;
+            this.index = index;
+        }
+
+        String getBracket() {
+            return bracket;
+        }
+
+        int getIndex() {
+            return index;
+        }
     }
 }
