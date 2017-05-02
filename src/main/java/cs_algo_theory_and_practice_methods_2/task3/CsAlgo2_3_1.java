@@ -21,7 +21,13 @@ public class CsAlgo2_3_1 {
             commands[i] = reader.nextLine();
         }
 
-        OpenAddressTable table = new OpenAddressTable();
+        List<String> results = processRequests(commands);
+
+        results.forEach(System.out::println);
+    }
+
+    static List<String> processRequests(String[] commands) {
+        OpenAddressTable table = new OpenAddressTable(commands.length);
         List<String> results = new ArrayList<>();
         for (String command : commands) {
             String[] strings = command.split(" ");
@@ -34,38 +40,40 @@ public class CsAlgo2_3_1 {
                 table.del(number);
             }
             if (operation.equals("find")) {
-                results.add(table.find(number));
+                String name = table.find(number);
+                results.add(name);
             }
         }
-
-        results.forEach(System.out::println);
+        return results;
     }
 
 
     static class OpenAddressTable {
         Data deleted = new Data(Integer.MAX_VALUE, "deleted");
 
-        public static final int M = 100_000;
         Data[] table;
+        private int n;
 
-        public OpenAddressTable() {
-            table = new Data[M];
+        public OpenAddressTable(int n) {
+            this.n = n;
+            table = new Data[n];
         }
 
         public void add(int number, String name) {
-            for (int j = 0; j < M; j++) {
+            for (int j = 0; j < n; j++) {
                 int index = h(number, j);
                 if (table[index] == null || table[index] == deleted) {
                     table[index] = new Data(number, name);
                     return;
                 } else if (table[index].number == number) {
                     table[index].name = name;
+                    return;
                 }
             }
         }
 
         public void del(int number) {
-            for (int j = 0; j < M; j++) {
+            for (int j = 0; j < n; j++) {
                 int index = h(number, j);
                 Data data = table[index];
                 if (data != null && data.number == number) {
@@ -76,7 +84,7 @@ public class CsAlgo2_3_1 {
         }
 
         public String find(int number) {
-            for (int j = 0; j < M; j++) {
+            for (int j = 0; j < n; j++) {
                 int index = h(number, j);
                 if (table[index] == null) {
                     return NOT_FOUND;
@@ -88,14 +96,12 @@ public class CsAlgo2_3_1 {
         }
 
         private int h(int k, int j) {
-            return (h0(k) + j) % M;
+            return (h0(k) + j) % n;
         }
 
         private int h0(int k) {
-            return k % M;
+            return k % n;
         }
-
-
     }
 
     static class Data {
@@ -116,7 +122,6 @@ public class CsAlgo2_3_1 {
 
             if (number != data.number) return false;
             return name != null ? name.equals(data.name) : data.name == null;
-
         }
 
         @Override
