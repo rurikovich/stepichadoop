@@ -2,10 +2,8 @@ package cs_algo_theory_and_practice_methods_2.task3;
 
 import org.junit.Test;
 
-import java.util.Arrays;
-
-import static java.util.Arrays.*;
-import static org.junit.Assert.*;
+import static java.util.Arrays.asList;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author RastegaevYO
@@ -21,7 +19,7 @@ public class CsAlgo2_3_1Test {
                     "not found",
                     "Mom",
                     "daddy"
-              ), CsAlgo2_3_1.processRequests(new String[]{
+              ), CsAlgo2_3_1_direct_table.processRequests(new String[]{
                     "add 911 police",
                     "add 76213 Mom",
                     "add 17239 Bob",
@@ -42,7 +40,7 @@ public class CsAlgo2_3_1Test {
                     "granny",
                     "me",
                     "not found"
-              ), CsAlgo2_3_1.processRequests(new String[]{
+              ), CsAlgo2_3_1_direct_table.processRequests(new String[]{
                     "find 3839442",
                     "add 123456 me",
                     "add 0 granny",
@@ -60,7 +58,7 @@ public class CsAlgo2_3_1Test {
                     "not found",
                     "not found",
                     "not found"
-              ), CsAlgo2_3_1.processRequests(new String[]{
+              ), CsAlgo2_3_1_direct_table.processRequests(new String[]{
                     "find 3839442",
                     "find 3839442",
                     "find 3839442",
@@ -73,7 +71,7 @@ public class CsAlgo2_3_1Test {
               asList(
                     "me",
                     "WEST"
-              ), CsAlgo2_3_1.processRequests(new String[]{
+              ), CsAlgo2_3_1_direct_table.processRequests(new String[]{
                     "add 123456 me",
                     "find 123456",
                     "add 123456 WEST",
@@ -83,7 +81,7 @@ public class CsAlgo2_3_1Test {
         assertEquals(
               asList(
 
-              ), CsAlgo2_3_1.processRequests(new String[]{
+              ), CsAlgo2_3_1_direct_table.processRequests(new String[]{
 
               }));
 
