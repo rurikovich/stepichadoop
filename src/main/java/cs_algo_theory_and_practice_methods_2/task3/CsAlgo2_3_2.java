@@ -32,16 +32,32 @@ public class CsAlgo2_3_2 {
             String operation = strings[0];
 
             if (operation.equals("add")) {
-                String str = strings[0];
+                String str = strings[1];
+                int index = h(str, m);
+                if (table[index] == null) {
+                    table[index] = new ArrayList<>();
+                }
+                if (!table[index].contains(str)) {
+                    table[index].add(str);
+                }
+
             }
             if (operation.equals("del")) {
-                String str = strings[0];
+                String str = strings[1];
+                int index = h(str, m);
+                if (table[index] != null && table[index].contains(str)) {
+                    table[index].remove(str);
+                }
+
             }
             if (operation.equals("find")) {
-                String str = strings[0];
+                String str = strings[1];
+                int index = h(str, m);
+                results.add((table[index] != null && table[index].contains(str)) ? "yes" : "no");
             }
             if (operation.equals("check")) {
-                Integer i = Integer.valueOf(strings[0]);
+                Integer i = Integer.valueOf(strings[1]);
+                results.add(listToString(table[i]));
             }
 
         }
@@ -50,13 +66,10 @@ public class CsAlgo2_3_2 {
         return results;
     }
 
-    static long h(String s, int m) {
+    static int h(String s, int m) {
         int p = 1_000_000_007;
         int x = 263;
-
-        long res = 0;
-
-
+        int res = 0;
         int x_mod_p = x % p;
         for (int i = 0; i < s.length(); i++) {
             int charCode = (int) s.charAt(i);
@@ -71,5 +84,17 @@ public class CsAlgo2_3_2 {
         return res;
     }
 
+    static String listToString(List list) {
+        StringBuilder res = new StringBuilder("");
+
+        for (int i = list.size() - 1; i >= 0; i--) {
+            res.append(list.get(i)).append(" ");
+        }
+        if (res.length() != 0) {
+            res.deleteCharAt(res.length() - 1);
+        }
+        return res.toString();
+
+    }
 
 }
