@@ -39,7 +39,8 @@ public class CsAlgo2_3_2Test {
                         "no",
                         "yes"),
                 CsAlgo2_3_2.processRequests(4,
-                        new String[]{"add test",
+                        new String[]{
+                                "add test",
                                 "add test",
                                 "find test",
                                 "del test",
@@ -51,12 +52,14 @@ public class CsAlgo2_3_2Test {
         );
 
         assertEquals(
-                asList("no",
+                asList("",
+                        "no",
                         "yes",
                         "yes",
                         "no",
                         "",
-                        "add help"),
+                        "add help",
+                        ""),
                 CsAlgo2_3_2.processRequests(3,
                         new String[]{"check 0",
                                 "find help",
@@ -73,13 +76,12 @@ public class CsAlgo2_3_2Test {
                 )
         );
 
-
     }
 
     @Test
     public void h() throws Exception {
         assertEquals(4, CsAlgo2_3_2.h("world", 5));
-        assertEquals(4, CsAlgo2_3_2.h("hello", 5));
+        assertEquals(4, CsAlgo2_3_2.h("HellO", 5));
     }
 
     @Test

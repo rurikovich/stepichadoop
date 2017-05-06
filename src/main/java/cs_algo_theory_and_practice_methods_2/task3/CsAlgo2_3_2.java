@@ -14,6 +14,7 @@ public class CsAlgo2_3_2 {
         int m = reader.nextInt();
         int n = reader.nextInt();
 
+        reader.nextLine();
         String[] commands = new String[n];
         for (int i = 0; i < n; i++) {
             commands[i] = reader.nextLine();
@@ -67,10 +68,10 @@ public class CsAlgo2_3_2 {
     }
 
     static int h(String s, int m) {
-        int p = 1_000_000_007;
-        int x = 263;
-        int res = 0;
-        int x_mod_p = x % p;
+        long p = 1_000_000_007;
+        long x = 263;
+        long res = 0;
+        long x_mod_p = x % p;
         for (int i = 0; i < s.length(); i++) {
             int charCode = (int) s.charAt(i);
 
@@ -81,10 +82,13 @@ public class CsAlgo2_3_2 {
             res += pow_mod_p;
         }
         res = (res % p) % m;
-        return res;
+        return (int) res;
     }
 
     static String listToString(List list) {
+        if (list == null) {
+            return "";
+        }
         StringBuilder res = new StringBuilder("");
 
         for (int i = list.size() - 1; i >= 0; i--) {
