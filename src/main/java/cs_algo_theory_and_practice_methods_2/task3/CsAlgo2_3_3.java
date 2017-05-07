@@ -9,6 +9,9 @@ import java.util.Scanner;
  */
 public class CsAlgo2_3_3 {
 
+    static int p = 1_000_000_007;
+    static int x = 263;
+
     public static void main(String[] args) {
         Scanner reader = new Scanner(System.in);
         String pattern = reader.next();
@@ -23,14 +26,13 @@ public class CsAlgo2_3_3 {
     }
 
     static List<Integer> findPatternIndexes(String pattern, String text) {
-        int p = 1_000_000_007;
-        int x = 263;
+
 
         List<Integer> indexes = new ArrayList<>();
 
         int patternHash = h(pattern, p, x);
         int pLength = pattern.length();
-        long x_pow_n_mod_p = x_pow_n_mod_p(1, x, pLength, p);
+        long x_pow_n_mod_p = x_pow_n_mod_p(1, x, pLength - 1, p);
 
         int startIndex = text.length() - pLength;
         String lastStr = text.substring(startIndex, text.length());
@@ -46,14 +48,11 @@ public class CsAlgo2_3_3 {
             int lastCharCode = (int) text.charAt(i + pLength);
             int firstCharCode = (int) text.charAt(i);
 
-//            long hash = (((prevHash - (lastCharCode * x_pow_n_mod_p) % p) % p * x) % p + firstCharCode) % p;
+            long hash = getNextHash(prevHash, x, p, x_pow_n_mod_p, lastCharCode, firstCharCode);
 
+//            long realHash = h(text.substring(i, i + pLength), p, x);
 
-            long hash = ((prevHash - lastCharCode * x_pow_n_mod_p) * x + firstCharCode) % p;
-
-            long realHash = h(text.substring(i, i + pLength), p, x);
-
-            if (realHash == patternHash && text.substring(i, i + pLength).equals(pattern)) {
+            if (hash == patternHash && text.substring(i, i + pLength).equals(pattern)) {
                 indexes.add(i);
             }
             prevHash = hash;
@@ -61,6 +60,10 @@ public class CsAlgo2_3_3 {
 
 
         return indexes;
+    }
+
+    static long getNextHash(long prevHash, int x, int p, long x_pow_n_mod_p, int lastCharCode, int firstCharCode) {
+        return ((((prevHash - (lastCharCode * x_pow_n_mod_p) % p) + p) % p * x) % p + firstCharCode) % p;
     }
 
 
@@ -77,7 +80,7 @@ public class CsAlgo2_3_3 {
         return (int) res;
     }
 
-    private static long x_pow_n_mod_p(int startValue, int x, int n, int p) {
+    static long x_pow_n_mod_p(int startValue, int x, int n, int p) {
         long x_mod_p = x % p;
         long pow_mod_p = startValue;
         for (int j = 0; j < n; j++) {
