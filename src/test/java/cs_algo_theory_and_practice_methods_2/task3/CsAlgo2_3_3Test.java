@@ -29,9 +29,7 @@ public class CsAlgo2_3_3Test {
         int n = 2 ;
         long x_pow_n_mod_p = x_pow_n_mod_p(1, x, n, p);
 
-
         long hash = h(str.substring(1, str.length()), p, x);
-
 
         int lastCharCode = (int) str.charAt(str.length() - 1);
         int firstCharCode = (int) str.charAt(0);
@@ -39,9 +37,7 @@ public class CsAlgo2_3_3Test {
 
         long realNextHash = h(str.substring(0, str.length() - 1), p, x);
 
-
         assertEquals(realNextHash, nextHash);
-
     }
 
 }

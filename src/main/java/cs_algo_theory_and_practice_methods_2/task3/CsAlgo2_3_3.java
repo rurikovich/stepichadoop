@@ -17,7 +17,6 @@ public class CsAlgo2_3_3 {
         String pattern = reader.next();
         String text = reader.next();
 
-
         List<Integer> results = findPatternIndexes(pattern, text);
 
         for (int i = results.size() - 1; i >= 0; i--) {
@@ -26,8 +25,6 @@ public class CsAlgo2_3_3 {
     }
 
     static List<Integer> findPatternIndexes(String pattern, String text) {
-
-
         List<Integer> indexes = new ArrayList<>();
 
         int patternHash = h(pattern, p, x);
@@ -42,23 +39,17 @@ public class CsAlgo2_3_3 {
             indexes.add(startIndex);
         }
 
-
         long prevHash = lastSubStrHash;
         for (int i = startIndex - 1; i >= 0; i--) {
             int lastCharCode = (int) text.charAt(i + pLength);
             int firstCharCode = (int) text.charAt(i);
-
             long hash = getNextHash(prevHash, x, p, x_pow_n_mod_p, lastCharCode, firstCharCode);
-
-//            long realHash = h(text.substring(i, i + pLength), p, x);
 
             if (hash == patternHash && text.substring(i, i + pLength).equals(pattern)) {
                 indexes.add(i);
             }
             prevHash = hash;
         }
-
-
         return indexes;
     }
 
@@ -70,12 +61,14 @@ public class CsAlgo2_3_3 {
     static int h(String s, int p, int x) {
         long res = 0;
 
+        long x_mod_p = x % p;
+        long pow_mod_p = 1;
         for (int i = 0; i < s.length(); i++) {
             int charCode = (int) s.charAt(i);
-            int startValue = charCode % p;
-            long pow_mod_p = x_pow_n_mod_p(startValue, x, i, p);
-            res = (res + pow_mod_p) % p;
+            res = (res + (charCode * pow_mod_p) % p) % p;
+            pow_mod_p = (pow_mod_p * x_mod_p) % p;
         }
+
         res = res % p;
         return (int) res;
     }
