@@ -3,6 +3,7 @@ package cs_algo_theory_and_practice_methods_2.task4;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static cs_algo_theory_and_practice_methods_2.task4.CsAlgo2_4_3.SearchTree;
@@ -54,7 +55,6 @@ public class CsAlgo2_4_3Test {
         ))));
 
 
-
 //----------------------------------INCORRECT----------------------------------------
 
         assertFalse(CsAlgo2_4_3.checkTree(createTree(asList(
@@ -103,7 +103,21 @@ public class CsAlgo2_4_3Test {
 
     private SearchTree createTree(List items) {
         ArrayList<TreeItem> treeItems = new ArrayList<>(items);
-        return new SearchTree(treeItems);
+        HashMap<Integer, Integer> keys = new HashMap<>();
+        for (TreeItem treeItem : treeItems) {
+            addKey(keys, treeItem.key);
+        }
+        SearchTree searchTree = new SearchTree(treeItems);
+        searchTree.setKeys(keys);
+        return searchTree;
+    }
+
+    private static void addKey(HashMap<Integer, Integer> keys, int key) {
+        if (keys.containsKey(key)) {
+            keys.put(key, keys.get(key) + 1);
+        } else {
+            keys.put(key, 1);
+        }
     }
 
 }
