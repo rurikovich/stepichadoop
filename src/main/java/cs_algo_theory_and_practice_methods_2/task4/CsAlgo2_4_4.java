@@ -89,22 +89,26 @@ class CsAlgo2_4_4 {
             if (item.hasOnlyOneChild()) {
                 deleteItemWithOneChild(item);
             }
+            updateParentsHeight(item.parent);
         }
 
         private void swichItems(TreeItem item1, TreeItem item2) {
             int item2ParentIndex = item2.parent;
             int item2LeftChildIndex = item2.left;
             int item2RightChildIndex = item2.right;
+            int item2TreeHeight = item2.treeHeight;
 
             TreeItem item1Parent = items.get(item1.parent);
             updateChildIndexOfParent(item1Parent, item1.currentIndex, item2.currentIndex);
             item2.left = item1.left;
             item2.right = item1.right;
+            item2.treeHeight = item1.treeHeight;
 
             TreeItem item2Parent = items.get(item2ParentIndex);
             updateChildIndexOfParent(item2Parent, item2.currentIndex, item1.currentIndex);
             item1.left = item2LeftChildIndex;
             item1.right = item2RightChildIndex;
+            item1.treeHeight = item2TreeHeight;
         }
 
         private TreeItem findLeftMaxItem(TreeItem item) {
@@ -151,18 +155,34 @@ class CsAlgo2_4_4 {
         }
 
         private void addLeftLeaf(TreeItem item, int itemIndex, int key) {
-            addNewItem(key, itemIndex);
+            TreeItem treeItem = addNewItem(key, itemIndex);
             item.left = items.size() - 1;
+            updateParentsHeight(treeItem.parent);
         }
 
         private void addRightLeaf(TreeItem item, int itemIndex, int key) {
-            addNewItem(key, itemIndex);
+            TreeItem treeItem = addNewItem(key, itemIndex);
             item.right = items.size() - 1;
+            updateParentsHeight(treeItem.parent);
         }
 
-        private void addNewItem(int key, int parent) {
+
+        private void updateParentsHeight(Integer itemIndex) {
+            if (itemIndex == -1) {
+                return;
+            }
+            TreeItem item = items.get(itemIndex);
+            int leftChildSubTreeHeight = (item.left != -1 ? items.get(item.left).treeHeight : 0) + 1;
+            int rightChildSubTreeHeight = (item.right != -1 ? items.get(item.right).treeHeight : 0) + 1;
+
+            item.treeHeight = Math.max(leftChildSubTreeHeight, rightChildSubTreeHeight) + 1;
+            updateParentsHeight(item.parent);
+        }
+
+        private TreeItem addNewItem(int key, int parent) {
             TreeItem newItem = new TreeItem(key, parent, -1, -1, items.size());
             items.add(newItem);
+            return newItem;
         }
     }
 
@@ -173,12 +193,15 @@ class CsAlgo2_4_4 {
         Integer right;
         final Integer currentIndex;
 
+        Integer treeHeight;
+
         public TreeItem(Integer key, Integer parent, Integer left, Integer right, Integer currentIndex) {
             this.key = key;
             this.parent = parent;
             this.left = left;
             this.right = right;
             this.currentIndex = currentIndex;
+            this.treeHeight = 1;
         }
 
         public boolean isLeaf() {
