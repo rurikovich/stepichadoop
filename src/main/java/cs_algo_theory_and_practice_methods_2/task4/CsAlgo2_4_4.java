@@ -49,6 +49,10 @@ class CsAlgo2_4_4 {
         }
 
         private void insert(int key, int i) {
+            if (items.isEmpty()) {
+                createTreeHead(key);
+                return;
+            }
             TreeItem item = items.get(i);
             if (key < item.key) {
                 if (item.left != -1) {
@@ -64,6 +68,10 @@ class CsAlgo2_4_4 {
                 }
             }
 
+        }
+
+        private void createTreeHead(int key) {
+            items.add(new TreeItem(key, -1, -1, -1, 0));
         }
 
         private void delete(int key, int i) {
@@ -98,8 +106,10 @@ class CsAlgo2_4_4 {
             int item2RightChildIndex = item2.right;
             int item2TreeHeight = item2.treeHeight;
 
-            TreeItem item1Parent = items.get(item1.parent);
-            updateChildIndexOfParent(item1Parent, item1.currentIndex, item2.currentIndex);
+            if (item1.parent != -1) {
+                TreeItem item1Parent = items.get(item1.parent);
+                updateChildIndexOfParent(item1Parent, item1.currentIndex, item2.currentIndex);
+            }
             item2.left = item1.left;
             item2.right = item1.right;
             item2.treeHeight = item1.treeHeight;
@@ -122,11 +132,15 @@ class CsAlgo2_4_4 {
         private void deleteItemWithOneChild(TreeItem item) {
             TreeItem parentItem = items.get(item.parent);
             if (item.left != -1) {
-                updateChildIndexOfParent(parentItem, item.currentIndex, item.left);
+                if (item.parent != -1) {
+                    updateChildIndexOfParent(parentItem, item.currentIndex, item.left);
+                }
                 updateIndexOfParent(item.left, item.parent);
             }
             if (item.right != -1) {
-                updateChildIndexOfParent(parentItem, item.currentIndex, item.right);
+                if (item.parent != -1) {
+                    updateChildIndexOfParent(parentItem, item.currentIndex, item.right);
+                }
                 updateIndexOfParent(item.right, item.parent);
             }
         }
@@ -145,6 +159,9 @@ class CsAlgo2_4_4 {
         }
 
         private void deleteLeaf(TreeItem item) {
+            if (item.parent == -1) {
+                return;
+            }
             TreeItem parentItem = items.get(item.parent);
             Integer currentIndex = item.currentIndex;
             if (parentItem.left == currentIndex) {
