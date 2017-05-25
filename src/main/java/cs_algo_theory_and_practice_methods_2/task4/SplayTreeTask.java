@@ -8,7 +8,6 @@ import java.util.List;
  */
 public class SplayTreeTask {
 
-
     static class SplayTree {
 
         List<SplayTreeItem> items = new ArrayList<>();
@@ -19,7 +18,12 @@ public class SplayTreeTask {
             return item;
         }
 
-        public SplayTreeItem find(int key, int index) {
+        public void insert(int key) {
+            SplayTreeItem item = insert(key, 0);
+            splay(item);
+        }
+
+        SplayTreeItem find(int key, int index) {
             SplayTreeItem item = items.get(index);
             if (key == item.key) {
                 return item;
@@ -39,12 +43,7 @@ public class SplayTreeTask {
             return null;
         }
 
-        public void insert(int key) {
-            SplayTreeItem item = insert(key, 0);
-            splay(item);
-        }
-
-        public SplayTreeItem insert(int key, int index) {
+        SplayTreeItem insert(int key, int index) {
             SplayTreeItem item = items.get(index);
             if (key == item.key) {
                 return item;
@@ -73,6 +72,27 @@ public class SplayTreeTask {
 
 
         private void splay(SplayTreeItem item) {
+            if (item.parent == -1) {
+                return;
+            }
+
+            SplayTreeItem parent = items.get(item.parent);
+            if (parent.parent != -1) {
+                SplayTreeItem grandFather = items.get(parent.parent);
+
+
+
+            } else {
+
+            }
+
+        }
+
+        private void ziqziq(SplayTreeItem item){
+
+        }
+
+        private void ziqzaq(SplayTreeItem item){
 
         }
 
