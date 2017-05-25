@@ -39,6 +39,39 @@ public class SplayTreeTask {
             return null;
         }
 
+        public void insert(int key) {
+            SplayTreeItem item = insert(key, 0);
+            splay(item);
+        }
+
+        public SplayTreeItem insert(int key, int index) {
+            SplayTreeItem item = items.get(index);
+            if (key == item.key) {
+                return item;
+            } else if (key < item.key) {
+                if (item.left != -1) {
+                    return insert(key, item.left);
+                } else {
+                    SplayTreeItem treeItem = new SplayTreeItem(key, item.index, -1, -1, items.size());
+                    item.left = items.size();
+                    items.add(treeItem);
+                    return treeItem;
+                }
+            } else if (key > item.key) {
+                if (item.right != -1) {
+                    return insert(key, item.right);
+                } else {
+                    SplayTreeItem treeItem = new SplayTreeItem(key, item.index, -1, -1, items.size());
+                    item.right = items.size();
+                    items.add(treeItem);
+                    return treeItem;
+                }
+            }
+            return null;
+
+        }
+
+
         private void splay(SplayTreeItem item) {
 
         }
