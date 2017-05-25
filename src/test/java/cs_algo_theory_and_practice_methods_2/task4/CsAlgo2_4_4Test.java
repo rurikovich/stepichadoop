@@ -25,6 +25,10 @@ public class CsAlgo2_4_4Test {
         List<Integer> deletedKeys = new ArrayList<>();
 
         addNewTreeItems(tree, keys, 30);
+
+
+        printTree(tree);
+
         keys.forEach(key -> assertNotNull(tree.find(key)));
 
 
@@ -34,13 +38,27 @@ public class CsAlgo2_4_4Test {
 
     }
 
+    @Test
+    public void testTreePrint() {
+        SearchTree tree = new SearchTree();
+
+        tree.insert(10);
+        tree.insert(4);
+        tree.insert(14);
+        tree.insert(1);
+        tree.insert(5);
+        printTree(tree);
+
+
+    }
+
     private void deleteItemsFormTree(SearchTree tree, List<Integer> keys, List<Integer> deletedKeys, int itemsCountToDelete) {
         Random random = new Random();
         for (int i = 0; i < itemsCountToDelete; i++) {
             Integer keyToDelete = keys.get(random.nextInt(keys.size()));
             deletedKeys.add(keyToDelete);
             keys.remove(keyToDelete);
-            System.out.println("- " + keyToDelete);
+//            System.out.println("- " + keyToDelete);
             tree.delete(keyToDelete);
         }
     }
@@ -53,7 +71,7 @@ public class CsAlgo2_4_4Test {
         }
 
         keys.forEach(key -> {
-            System.out.println("+ " + key);
+//            System.out.println("+ " + key);
             tree.insert(key);
         });
 
@@ -61,11 +79,47 @@ public class CsAlgo2_4_4Test {
 
 
     private void printTree(SearchTree tree) {
-        PriorityQueue<TreeItem> queue = new PriorityQueue<>(tree.items.size());
-
+        PriorityQueue<TreeItemToPrint> queue = new PriorityQueue<>(tree.items.size(), (t1, t2) -> {
+            int levelCmpare = t1.level.compareTo(t2.level);
+            return levelCmpare == 0 ? t1.key.compareTo(t2.key) : levelCmpare;
+        });
+        collectTreeItemsToQueue(tree, queue, 0, 0);
+        int level = 0;
+        while (!queue.isEmpty()) {
+            TreeItemToPrint itemToPrint = queue.poll();
+            if (itemToPrint.level > level) {
+                level++;
+                System.out.println();
+            }
+            System.out.print(itemToPrint.key + " ");
+        }
 
         System.out.println();
 
+
+    }
+
+    private void collectTreeItemsToQueue(SearchTree tree, PriorityQueue<TreeItemToPrint> queue, int index, int level) {
+        TreeItem treeItem = tree.items.get(index);
+        queue.add(new TreeItemToPrint(treeItem.key, level));
+        if (treeItem.left != -1) {
+            collectTreeItemsToQueue(tree, queue, treeItem.left, level + 1);
+        }
+
+        if (treeItem.right != -1) {
+            collectTreeItemsToQueue(tree, queue, treeItem.right, level + 1);
+        }
+
+    }
+
+    static class TreeItemToPrint {
+        Integer key;
+        Integer level;
+
+        public TreeItemToPrint(Integer key, Integer level) {
+            this.key = key;
+            this.level = level;
+        }
     }
 
 }
