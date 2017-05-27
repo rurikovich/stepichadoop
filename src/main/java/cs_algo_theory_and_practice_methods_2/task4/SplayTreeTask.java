@@ -18,29 +18,31 @@ public class SplayTreeTask {
 
         public SplayTreeItem find(int key) {
             SplayTreeItem item = find(key, 0);
-            splay(item);
             return item;
         }
 
         public void insert(int key) {
             SplayTreeItem item = insert(key, 0);
-            splay(item);
+
         }
 
         SplayTreeItem find(int key, int index) {
             SplayTreeItem item = items.get(index);
             if (key == item.key) {
+                splay(item);
                 return item;
             } else if (key < item.key) {
                 if (item.left != -1) {
                     return find(key, item.left);
                 } else {
+                    splay(item);
                     return null;
                 }
             } else if (key > item.key) {
                 if (item.right != -1) {
                     return find(key, item.right);
                 } else {
+                    splay(item);
                     return null;
                 }
             }
@@ -55,6 +57,7 @@ public class SplayTreeTask {
 
             SplayTreeItem item = items.get(index);
             if (key == item.key) {
+                splay(item);
                 return item;
             } else if (key < item.key) {
                 if (item.left != -1) {
@@ -63,6 +66,7 @@ public class SplayTreeTask {
                     SplayTreeItem treeItem = new SplayTreeItem(key, item.index, -1, -1, items.size(), LEFT);
                     item.left = items.size();
                     items.add(treeItem);
+                    splay(item);
                     return treeItem;
                 }
             } else if (key > item.key) {
@@ -72,6 +76,7 @@ public class SplayTreeTask {
                     SplayTreeItem treeItem = new SplayTreeItem(key, item.index, -1, -1, items.size(), RIGHT);
                     item.right = items.size();
                     items.add(treeItem);
+                    splay(item);
                     return treeItem;
                 }
             }
@@ -119,7 +124,6 @@ public class SplayTreeTask {
             item.childType = grandFatherChildType;
             item.parent = grandFatherParentIndex;
         }
-
 
         private void ziqzaq(SplayTreeItem item, SplayTreeItem parent, SplayTreeItem grandFather) {
             int grandFatherParentIndex = grandFather.parent;
@@ -170,7 +174,6 @@ public class SplayTreeTask {
 
         }
 
-
         private void ziq(SplayTreeItem item, SplayTreeItem parent) {
             int parentParentIndex = parent.parent;
             ChildType parentChildType = parent.childType;
@@ -195,7 +198,6 @@ public class SplayTreeTask {
             item.childType = parentChildType;
         }
 
-
         private void updateLeftChild(SplayTreeItem itemToUpdate, int newLeftChildIndex) {
             itemToUpdate.left = newLeftChildIndex;
             if (newLeftChildIndex != -1) {
@@ -204,7 +206,6 @@ public class SplayTreeTask {
                 item.parent = itemToUpdate.index;
             }
         }
-
 
         private void updateRightChild(SplayTreeItem itemToUpdate, int newRightChildIndex) {
             itemToUpdate.right = newRightChildIndex;
@@ -215,7 +216,6 @@ public class SplayTreeTask {
             }
         }
     }
-
 
     static class SplayTreeItem {
         int key;
@@ -250,6 +250,5 @@ public class SplayTreeTask {
         RIGHT,
         NOT_A_CHILD
     }
-
 
 }
