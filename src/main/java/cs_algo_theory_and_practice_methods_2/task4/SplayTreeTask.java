@@ -11,6 +11,8 @@ import static cs_algo_theory_and_practice_methods_2.task4.SplayTreeTask.ChildTyp
  * Created by rurik on 25/05/17.
  */
 public class SplayTreeTask {
+    List<SplayTreeItem> treeItems = new ArrayList<>();
+
 
     static class SplayTree {
         int treeHeadIndex;
@@ -40,8 +42,42 @@ public class SplayTreeTask {
 
         }
 
+        public SplayTreeItem getMax() {
+            SplayTreeItem item = getHead();
+            while (item.right != -1) {
+                item = items.get(item.right);
+            }
+            return item;
+        }
 
-        SplayTreeItem find(int key, int index) {
+        public void splay(SplayTreeItem item) {
+            while (item.parent != -1) {
+                SplayTreeItem parent = items.get(item.parent);
+                if (parent.parent != -1) {
+                    SplayTreeItem grandFather = items.get(parent.parent);
+
+                    if (item.isLeftChild() && parent.isLeftChild()) {
+                        ziqziq(item, parent, grandFather);
+                    } else if (item.isLeftChild() && parent.isRightChild()) {
+                        ziqzaq(item, parent, grandFather);
+                    } else if (item.isRightChild() && parent.isRightChild()) {
+                        zaqzaq(item, parent, grandFather);
+                    } else if (item.isRightChild() && parent.isLeftChild()) {
+                        zaqziq(item, parent, grandFather);
+                    }
+                } else {
+                    if (item.isLeftChild()) {
+                        ziq(item, parent);
+                    } else if (item.isRightChild()) {
+                        zaq(item, parent);
+                    }
+                }
+            }
+            treeHeadIndex = item.index;
+
+        }
+
+        private SplayTreeItem find(int key, int index) {
             SplayTreeItem item = items.get(index);
             if (key == item.key) {
                 splay(item);
@@ -64,7 +100,7 @@ public class SplayTreeTask {
             return null;
         }
 
-        SplayTreeItem insert(int key, int index) {
+        private SplayTreeItem insert(int key, int index) {
             if (items.isEmpty()) {
                 SplayTreeItem treeItem = new SplayTreeItem(key, -1, -1, -1, 0, NOT_A_CHILD);
                 items.add(treeItem);
@@ -96,34 +132,6 @@ public class SplayTreeTask {
                 }
             }
             return null;
-
-        }
-
-
-        private void splay(SplayTreeItem item) {
-            while (item.parent != -1) {
-                SplayTreeItem parent = items.get(item.parent);
-                if (parent.parent != -1) {
-                    SplayTreeItem grandFather = items.get(parent.parent);
-
-                    if (item.isLeftChild() && parent.isLeftChild()) {
-                        ziqziq(item, parent, grandFather);
-                    } else if (item.isLeftChild() && parent.isRightChild()) {
-                        ziqzaq(item, parent, grandFather);
-                    } else if (item.isRightChild() && parent.isRightChild()) {
-                        zaqzaq(item, parent, grandFather);
-                    } else if (item.isRightChild() && parent.isLeftChild()) {
-                        zaqziq(item, parent, grandFather);
-                    }
-                } else {
-                    if (item.isLeftChild()) {
-                        ziq(item, parent);
-                    } else if (item.isRightChild()) {
-                        zaq(item, parent);
-                    }
-                }
-            }
-            treeHeadIndex = item.index;
 
         }
 
@@ -279,7 +287,7 @@ public class SplayTreeTask {
 
             head.right = -1;
 
-            SplayTree rightTree = new SplayTree(rightTreeHead.index, tree.items);
+            SplayTree rightTree = new SplayTree(rightTreeHead.index, treeItems);
             return new SplayTree[]{tree, rightTree};
         } else {
 
@@ -289,12 +297,19 @@ public class SplayTreeTask {
 
             head.left = -1;
 
-            SplayTree leftTree = new SplayTree(leftTreeHead.index, tree.items);
+            SplayTree leftTree = new SplayTree(leftTreeHead.index, treeItems);
             return new SplayTree[]{leftTree, tree};
-
         }
 
     }
 
+    public SplayTree merge(SplayTree tree1, SplayTree tree2) {
+        SplayTreeItem tree1Max = tree1.getMax();
+        tree1.splay(tree1Max);
+        tree1.getHead().right = tree2.getHead().index;
+        tree2.getHead().childType = RIGHT;
+        tree2.getHead().parent = tree1.getHead().index;
+        return tree1;
+    }
 
 }
