@@ -13,18 +13,33 @@ import static cs_algo_theory_and_practice_methods_2.task4.SplayTreeTask.ChildTyp
 public class SplayTreeTask {
 
     static class SplayTree {
+        int treeHeadIndex;
 
-        List<SplayTreeItem> items = new ArrayList<>();
+        List<SplayTreeItem> items;
+
+        public SplayTree() {
+            treeHeadIndex = 0;
+            items = new ArrayList<>();
+        }
+
+        public SplayTree(int treeHeadIndex, List<SplayTreeItem> items) {
+            this.treeHeadIndex = treeHeadIndex;
+            this.items = items;
+        }
+
+        public SplayTreeItem getHead() {
+            return items.get(treeHeadIndex);
+        }
 
         public SplayTreeItem find(int key) {
-            SplayTreeItem item = find(key, 0);
-            return item;
+            return find(key, treeHeadIndex);
         }
 
         public void insert(int key) {
-            SplayTreeItem item = insert(key, 0);
+            insert(key, treeHeadIndex);
 
         }
+
 
         SplayTreeItem find(int key, int index) {
             SplayTreeItem item = items.get(index);
@@ -108,6 +123,8 @@ public class SplayTreeTask {
                     }
                 }
             }
+            treeHeadIndex = item.index;
+
         }
 
         private void ziqziq(SplayTreeItem item, SplayTreeItem parent, SplayTreeItem grandFather) {
@@ -250,5 +267,34 @@ public class SplayTreeTask {
         RIGHT,
         NOT_A_CHILD
     }
+
+    public SplayTree[] split(SplayTree tree, int key) {
+        tree.find(key);
+
+        SplayTreeItem head = tree.getHead();
+        if (head.key <= key) {
+            SplayTreeItem rightTreeHead = tree.items.get(head.right);
+            rightTreeHead.parent = -1;
+            rightTreeHead.childType = NOT_A_CHILD;
+
+            head.right = -1;
+
+            SplayTree rightTree = new SplayTree(rightTreeHead.index, tree.items);
+            return new SplayTree[]{tree, rightTree};
+        } else {
+
+            SplayTreeItem leftTreeHead = tree.items.get(head.left);
+            leftTreeHead.parent = -1;
+            leftTreeHead.childType = NOT_A_CHILD;
+
+            head.left = -1;
+
+            SplayTree leftTree = new SplayTree(leftTreeHead.index, tree.items);
+            return new SplayTree[]{leftTree, tree};
+
+        }
+
+    }
+
 
 }
