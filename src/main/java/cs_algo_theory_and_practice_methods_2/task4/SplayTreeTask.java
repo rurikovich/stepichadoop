@@ -253,6 +253,8 @@ public class SplayTreeTask {
         int index;
         ChildType childType;
 
+        int sum;
+
         public SplayTreeItem(int key, int parent, int left, int right, int index, ChildType childType) {
             this.key = key;
             this.parent = parent;
@@ -260,6 +262,11 @@ public class SplayTreeTask {
             this.right = right;
             this.index = index;
             this.childType = childType;
+            this.sum = key;
+        }
+
+        public int getSum() {
+            return sum;
         }
 
         public boolean isLeftChild() {
@@ -334,5 +341,22 @@ public class SplayTreeTask {
 
         merge(leftTree, rightTree);
     }
+
+    public int getSum(SplayTree tree, int l, int r) {
+        SplayTree[] lSplitTrees = split(tree, l - 1);
+        SplayTree leftTree = lSplitTrees[0];
+        SplayTree rightTree = lSplitTrees[1];
+
+
+        SplayTree[] rSplitTrees = split(rightTree, r);
+        SplayTree resTree = rSplitTrees[0];
+        int resSum = resTree.getHead().getSum();
+
+        SplayTree rMergeTree = merge(rSplitTrees[0], rSplitTrees[1]);
+        tree = merge(leftTree, rMergeTree);
+
+        return resSum;
+    }
+
 
 }
