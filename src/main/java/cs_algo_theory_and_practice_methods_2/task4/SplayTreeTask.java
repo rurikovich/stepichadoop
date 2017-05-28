@@ -2,16 +2,53 @@ package cs_algo_theory_and_practice_methods_2.task4;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
-import static cs_algo_theory_and_practice_methods_2.task4.SplayTreeTask.ChildType.LEFT;
-import static cs_algo_theory_and_practice_methods_2.task4.SplayTreeTask.ChildType.NOT_A_CHILD;
-import static cs_algo_theory_and_practice_methods_2.task4.SplayTreeTask.ChildType.RIGHT;
 
 /**
  * Created by rurik on 25/05/17.
  */
 public class SplayTreeTask {
+    private static int s = 0;
+
     List<SplayTreeItem> treeItems = new ArrayList<>();
+
+    public static void main(String[] args) {
+        Scanner reader = new Scanner(System.in);
+        int n = reader.nextInt();
+
+        SplayTree tree = new SplayTree();
+
+
+        SplayTreeTask task = new SplayTreeTask();
+
+        for (int i = 0; i < n; i++) {
+            String command = reader.next();
+            if (command.equals("+")) {
+                int key = reader.nextInt();
+                tree.insert(f(key));
+            } else if (command.equals("-")) {
+                int key = reader.nextInt();
+                SplayTreeItem item = tree.find(f(key));
+                task.remove(tree, item);
+            } else if (command.equals("?")) {
+                int key = reader.nextInt();
+                SplayTreeItem item = tree.find(f(key));
+                System.out.println(item != null ? "Found" : "Not found");
+            } else if (command.equals("s")) {
+                int l = reader.nextInt();
+                int r = reader.nextInt();
+
+                int sum = task.getSum(tree, f(l), f(r));
+                System.out.println(sum);
+
+            }
+
+
+        }
+
+
+    }
 
     static class SplayTree {
         int treeHeadIndex;
@@ -120,7 +157,7 @@ public class SplayTreeTask {
 
         private SplayTreeItem insert(int key, int index) {
             if (items.isEmpty()) {
-                SplayTreeItem treeItem = new SplayTreeItem(key, -1, -1, -1, 0, NOT_A_CHILD);
+                SplayTreeItem treeItem = new SplayTreeItem(key, -1, -1, -1, 0, ChildType.NOT_A_CHILD);
                 items.add(treeItem);
             }
 
@@ -132,7 +169,7 @@ public class SplayTreeTask {
                 if (item.left != -1) {
                     return insert(key, item.left);
                 } else {
-                    SplayTreeItem treeItem = new SplayTreeItem(key, item.index, -1, -1, items.size(), LEFT);
+                    SplayTreeItem treeItem = new SplayTreeItem(key, item.index, -1, -1, items.size(), ChildType.LEFT);
                     item.left = items.size();
                     items.add(treeItem);
                     splay(treeItem);
@@ -142,7 +179,7 @@ public class SplayTreeTask {
                 if (item.right != -1) {
                     return insert(key, item.right);
                 } else {
-                    SplayTreeItem treeItem = new SplayTreeItem(key, item.index, -1, -1, items.size(), RIGHT);
+                    SplayTreeItem treeItem = new SplayTreeItem(key, item.index, -1, -1, items.size(), ChildType.RIGHT);
                     item.right = items.size();
                     items.add(treeItem);
                     splay(treeItem);
@@ -245,7 +282,7 @@ public class SplayTreeTask {
             itemToUpdate.left = newLeftChildIndex;
             if (newLeftChildIndex != -1) {
                 SplayTreeItem item = items.get(newLeftChildIndex);
-                item.childType = LEFT;
+                item.childType = ChildType.LEFT;
                 item.parent = itemToUpdate.index;
             }
         }
@@ -254,7 +291,7 @@ public class SplayTreeTask {
             itemToUpdate.right = newRightChildIndex;
             if (newRightChildIndex != -1) {
                 SplayTreeItem item = items.get(newRightChildIndex);
-                item.childType = RIGHT;
+                item.childType = ChildType.RIGHT;
                 item.parent = itemToUpdate.index;
             }
         }
@@ -285,12 +322,12 @@ public class SplayTreeTask {
         }
 
         public boolean isLeftChild() {
-            return childType.equals(LEFT);
+            return childType.equals(ChildType.LEFT);
         }
 
 
         public boolean isRightChild() {
-            return childType.equals(RIGHT);
+            return childType.equals(ChildType.RIGHT);
         }
 
     }
@@ -301,6 +338,10 @@ public class SplayTreeTask {
         NOT_A_CHILD
     }
 
+    public static int f(int x) {
+        return (x + s) % 1_000_000_001;
+    }
+
     public SplayTree[] split(SplayTree tree, int key) {
         tree.find(key);
 
@@ -308,7 +349,7 @@ public class SplayTreeTask {
         if (head.key <= key) {
             SplayTreeItem rightTreeHead = tree.get(head.right);
             rightTreeHead.parent = -1;
-            rightTreeHead.childType = NOT_A_CHILD;
+            rightTreeHead.childType = ChildType.NOT_A_CHILD;
 
             head.right = -1;
 
@@ -320,7 +361,7 @@ public class SplayTreeTask {
 
             SplayTreeItem leftTreeHead = tree.get(head.left);
             leftTreeHead.parent = -1;
-            leftTreeHead.childType = NOT_A_CHILD;
+            leftTreeHead.childType = ChildType.NOT_A_CHILD;
 
             head.left = -1;
 
@@ -336,7 +377,7 @@ public class SplayTreeTask {
         SplayTreeItem tree1Max = tree1.getMax();
         tree1.splay(tree1Max);
         tree1.getHead().right = tree2.getHead().index;
-        tree2.getHead().childType = RIGHT;
+        tree2.getHead().childType = ChildType.RIGHT;
         tree2.getHead().parent = tree1.getHead().index;
 
         tree1.updateItemSum(tree1.getHead());
@@ -353,9 +394,9 @@ public class SplayTreeTask {
         item.right = -1;
 
         leftItem.parent = -1;
-        leftItem.childType = NOT_A_CHILD;
+        leftItem.childType = ChildType.NOT_A_CHILD;
         rightItem.parent = -1;
-        rightItem.childType = NOT_A_CHILD;
+        rightItem.childType = ChildType.NOT_A_CHILD;
 
         SplayTree leftTree = new SplayTree(leftItem.index, treeItems);
         SplayTree rightTree = new SplayTree(rightItem.index, treeItems);
