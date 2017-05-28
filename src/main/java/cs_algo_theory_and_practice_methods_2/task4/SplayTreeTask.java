@@ -13,7 +13,6 @@ import static cs_algo_theory_and_practice_methods_2.task4.SplayTreeTask.ChildTyp
 public class SplayTreeTask {
     List<SplayTreeItem> treeItems = new ArrayList<>();
 
-
     static class SplayTree {
         int treeHeadIndex;
 
@@ -75,6 +74,10 @@ public class SplayTreeTask {
             }
             treeHeadIndex = item.index;
 
+        }
+
+        public SplayTreeItem get(int i) {
+            return items.get(i);
         }
 
         private SplayTreeItem find(int key, int index) {
@@ -281,7 +284,7 @@ public class SplayTreeTask {
 
         SplayTreeItem head = tree.getHead();
         if (head.key <= key) {
-            SplayTreeItem rightTreeHead = tree.items.get(head.right);
+            SplayTreeItem rightTreeHead = tree.get(head.right);
             rightTreeHead.parent = -1;
             rightTreeHead.childType = NOT_A_CHILD;
 
@@ -291,7 +294,7 @@ public class SplayTreeTask {
             return new SplayTree[]{tree, rightTree};
         } else {
 
-            SplayTreeItem leftTreeHead = tree.items.get(head.left);
+            SplayTreeItem leftTreeHead = tree.get(head.left);
             leftTreeHead.parent = -1;
             leftTreeHead.childType = NOT_A_CHILD;
 
@@ -310,6 +313,26 @@ public class SplayTreeTask {
         tree2.getHead().childType = RIGHT;
         tree2.getHead().parent = tree1.getHead().index;
         return tree1;
+    }
+
+    public void remove(SplayTree tree, SplayTreeItem item) {
+        tree.splay(item);
+
+        SplayTreeItem leftItem = tree.get(item.left);
+        SplayTreeItem rightItem = tree.get(item.right);
+
+        item.left = -1;
+        item.right = -1;
+
+        leftItem.parent = -1;
+        leftItem.childType = NOT_A_CHILD;
+        rightItem.parent = -1;
+        rightItem.childType = NOT_A_CHILD;
+
+        SplayTree leftTree = new SplayTree(leftItem.index, treeItems);
+        SplayTree rightTree = new SplayTree(rightItem.index, treeItems);
+
+        merge(leftTree, rightTree);
     }
 
 }
