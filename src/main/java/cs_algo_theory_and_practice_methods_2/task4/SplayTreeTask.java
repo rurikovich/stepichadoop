@@ -64,12 +64,17 @@ public class SplayTreeTask {
                     } else if (item.isRightChild() && parent.isLeftChild()) {
                         zaqziq(item, parent, grandFather);
                     }
+
+                    updateItemSum(parent);
+                    updateItemSum(grandFather);
+
                 } else {
                     if (item.isLeftChild()) {
                         ziq(item, parent);
                     } else if (item.isRightChild()) {
                         zaq(item, parent);
                     }
+                    updateItemSum(parent);
                 }
             }
             treeHeadIndex = item.index;
@@ -78,6 +83,16 @@ public class SplayTreeTask {
 
         public SplayTreeItem get(int i) {
             return items.get(i);
+        }
+
+        public void updateItemSum(SplayTreeItem item) {
+            item.sum = item.key;
+            if (item.left != -1) {
+                item.sum += items.get(item.left).sum;
+            }
+            if (item.right != -1) {
+                item.sum += items.get(item.right).sum;
+            }
         }
 
         private SplayTreeItem find(int key, int index) {
@@ -120,7 +135,7 @@ public class SplayTreeTask {
                     SplayTreeItem treeItem = new SplayTreeItem(key, item.index, -1, -1, items.size(), LEFT);
                     item.left = items.size();
                     items.add(treeItem);
-                    splay(item);
+                    splay(treeItem);
                     return treeItem;
                 }
             } else if (key > item.key) {
@@ -130,7 +145,7 @@ public class SplayTreeTask {
                     SplayTreeItem treeItem = new SplayTreeItem(key, item.index, -1, -1, items.size(), RIGHT);
                     item.right = items.size();
                     items.add(treeItem);
-                    splay(item);
+                    splay(treeItem);
                     return treeItem;
                 }
             }
@@ -297,6 +312,8 @@ public class SplayTreeTask {
 
             head.right = -1;
 
+            tree.updateItemSum(tree.getHead());
+
             SplayTree rightTree = new SplayTree(rightTreeHead.index, treeItems);
             return new SplayTree[]{tree, rightTree};
         } else {
@@ -306,6 +323,8 @@ public class SplayTreeTask {
             leftTreeHead.childType = NOT_A_CHILD;
 
             head.left = -1;
+
+            tree.updateItemSum(tree.getHead());
 
             SplayTree leftTree = new SplayTree(leftTreeHead.index, treeItems);
             return new SplayTree[]{leftTree, tree};
@@ -319,6 +338,8 @@ public class SplayTreeTask {
         tree1.getHead().right = tree2.getHead().index;
         tree2.getHead().childType = RIGHT;
         tree2.getHead().parent = tree1.getHead().index;
+
+        tree1.updateItemSum(tree1.getHead());
         return tree1;
     }
 
@@ -346,7 +367,6 @@ public class SplayTreeTask {
         SplayTree[] lSplitTrees = split(tree, l - 1);
         SplayTree leftTree = lSplitTrees[0];
         SplayTree rightTree = lSplitTrees[1];
-
 
         SplayTree[] rSplitTrees = split(rightTree, r);
         SplayTree resTree = rSplitTrees[0];
