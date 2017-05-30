@@ -17,33 +17,59 @@ public class SplayTreeTaskTest {
 
         SplayTree tree = new SplayTree();
 
+//        assertEquals(
+//                asList("Not found",
+//                        "Found",
+//                        "3",
+//                        "Found",
+//                        "Not found",
+//                        "1",
+//                        "Not found",
+//                        "10"),
+//                splayTreeTask.processCommands(tree,
+//                        asList("? 1",
+//                                "+ 1",
+//                                "? 1",
+//                                "+ 2",
+//                                "s 1 2",
+//                                "+ 1000000000",
+//                                "? 1000000000",
+//                                "- 1000000000",
+//                                "? 1000000000",
+//                                "s 999999999 1000000000",
+//                                "- 2",
+//                                "? 2",
+//                                "- 0",
+//                                "+ 9",
+//                                "s 0 9")
+//                )
+//        );
+
         assertEquals(
                 asList("Not found",
                         "Found",
-                        "3",
-                        "Found",
-                        "Not found",
-                        "1",
-                        "Not found",
-                        "10"),
+                        "Not found"),
                 splayTreeTask.processCommands(tree,
-                        asList("? 1",
-                                "+ 1",
-                                "? 1",
-                                "+ 2",
-                                "s 1 2",
-                                "+ 1000000000",
-                                "? 1000000000",
-                                "- 1000000000",
-                                "? 1000000000",
-                                "s 999999999 1000000000",
-                                "- 2",
-                                "? 2",
+                        asList("? 0",
+                                "+ 0",
+                                "? 0",
                                 "- 0",
-                                "+ 9",
-                                "s 0 9")
+                                "? 0")
                 )
         );
+
+//        assertEquals(
+//                asList("Found",
+//                        "Not found",
+//                        "491572259"),
+//                splayTreeTask.processCommands(tree,
+//                        asList("+ 491572259",
+//                                "? 491572259",
+//                                "? 899375874",
+//                                "s 310971296 877523306",
+//                                "+ 352411209")
+//                )
+//        );
 
     }
 

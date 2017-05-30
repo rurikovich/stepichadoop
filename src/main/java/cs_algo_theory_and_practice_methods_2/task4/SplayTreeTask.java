@@ -73,7 +73,7 @@ public class SplayTreeTask {
         }
 
         public SplayTreeItem getHead() {
-            return items.get(treeHeadIndex);
+            return treeHeadIndex != -1 ? items.get(treeHeadIndex) : null;
         }
 
         public SplayTreeItem find(int key) {
@@ -357,7 +357,11 @@ public class SplayTreeTask {
         tree.find(key);
 
         SplayTreeItem head = tree.getHead();
-        if (head.key <= key && head.right != -1) {
+        if (head.key <= key) {
+            if (head.right == -1) {
+                return new SplayTree[]{tree, new SplayTree(-1, treeItems)};
+            }
+
             SplayTreeItem rightTreeHead = tree.get(head.right);
             rightTreeHead.parent = -1;
             rightTreeHead.childType = ChildType.NOT_A_CHILD;
@@ -368,7 +372,11 @@ public class SplayTreeTask {
 
             SplayTree rightTree = new SplayTree(rightTreeHead.index, treeItems);
             return new SplayTree[]{tree, rightTree};
-        } else if (head.left != -1) {
+        } else {
+
+            if (head.left == -1) {
+                return new SplayTree[]{new SplayTree(-1, treeItems), tree};
+            }
 
             SplayTreeItem leftTreeHead = tree.get(head.left);
             leftTreeHead.parent = -1;
@@ -381,16 +389,18 @@ public class SplayTreeTask {
             SplayTree leftTree = new SplayTree(leftTreeHead.index, treeItems);
             return new SplayTree[]{leftTree, tree};
         }
-        return null;
 
     }
 
     public SplayTree merge(SplayTree tree1, SplayTree tree2) {
         SplayTreeItem tree1Max = tree1.getMax();
         tree1.splay(tree1Max);
-        tree1.getHead().right = tree2.getHead().index;
-        tree2.getHead().childType = ChildType.RIGHT;
-        tree2.getHead().parent = tree1.getHead().index;
+        SplayTreeItem tree2Head = tree2.getHead();
+        if (tree2Head!=null) {
+            tree1.getHead().right = tree2Head.index;
+            tree2.getHead().childType = ChildType.RIGHT;
+            tree2.getHead().parent = tree1.getHead().index;
+        }
 
         tree1.updateItemSum(tree1.getHead());
         return tree1;
