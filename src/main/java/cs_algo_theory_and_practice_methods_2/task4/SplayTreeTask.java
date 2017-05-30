@@ -19,35 +19,42 @@ public class SplayTreeTask {
 
         SplayTree tree = new SplayTree();
 
-
         SplayTreeTask task = new SplayTreeTask();
 
+        List<String> commands = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            String command = reader.next();
-            if (command.equals("+")) {
-                int key = reader.nextInt();
-                tree.insert(f(key));
-            } else if (command.equals("-")) {
-                int key = reader.nextInt();
-                SplayTreeItem item = tree.find(f(key));
-                task.remove(tree, item);
-            } else if (command.equals("?")) {
-                int key = reader.nextInt();
-                SplayTreeItem item = tree.find(f(key));
-                System.out.println(item != null ? "Found" : "Not found");
-            } else if (command.equals("s")) {
-                int l = reader.nextInt();
-                int r = reader.nextInt();
-
-                int sum = task.getSum(tree, f(l), f(r));
-                System.out.println(sum);
-
-            }
-
-
+            commands.add(reader.nextLine());
         }
 
+        List<String> results = task.processCommands(tree, commands);
+        results.forEach(System.out::println);
+    }
 
+
+    public List<String> processCommands(SplayTree tree, List<String> commands) {
+        List<String> results = new ArrayList<>();
+        for (String command : commands) {
+            if (command.startsWith("+")) {
+                int key = Integer.parseInt(command.split(" ")[1]);
+                tree.insert(f(key));
+            } else if (command.startsWith("-")) {
+                int key = Integer.parseInt(command.split(" ")[1]);
+                SplayTreeItem item = tree.find(f(key));
+                remove(tree, item);
+            } else if (command.startsWith("?")) {
+                int key = Integer.parseInt(command.split(" ")[1]);
+                SplayTreeItem item = tree.find(f(key));
+                String res = item != null ? "Found" : "Not found";
+                results.add(res);
+            } else if (command.startsWith("s")) {
+                int l = Integer.parseInt(command.split(" ")[1]);
+                int r = Integer.parseInt(command.split(" ")[2]);
+
+                Integer sum = getSum(tree, f(l), f(r));
+                results.add(sum.toString());
+            }
+        }
+        return results;
     }
 
     static class SplayTree {
@@ -133,6 +140,10 @@ public class SplayTreeTask {
         }
 
         private SplayTreeItem find(int key, int index) {
+            if (items.isEmpty()) {
+                return null;
+            }
+
             SplayTreeItem item = items.get(index);
             if (key == item.key) {
                 splay(item);
@@ -338,7 +349,7 @@ public class SplayTreeTask {
         NOT_A_CHILD
     }
 
-    public static int f(int x) {
+    public int f(int x) {
         return (x + s) % 1_000_000_001;
     }
 
@@ -346,7 +357,7 @@ public class SplayTreeTask {
         tree.find(key);
 
         SplayTreeItem head = tree.getHead();
-        if (head.key <= key) {
+        if (head.key <= key && head.right != -1) {
             SplayTreeItem rightTreeHead = tree.get(head.right);
             rightTreeHead.parent = -1;
             rightTreeHead.childType = ChildType.NOT_A_CHILD;
@@ -357,7 +368,7 @@ public class SplayTreeTask {
 
             SplayTree rightTree = new SplayTree(rightTreeHead.index, treeItems);
             return new SplayTree[]{tree, rightTree};
-        } else {
+        } else if (head.left != -1) {
 
             SplayTreeItem leftTreeHead = tree.get(head.left);
             leftTreeHead.parent = -1;
@@ -370,6 +381,7 @@ public class SplayTreeTask {
             SplayTree leftTree = new SplayTree(leftTreeHead.index, treeItems);
             return new SplayTree[]{leftTree, tree};
         }
+        return null;
 
     }
 
